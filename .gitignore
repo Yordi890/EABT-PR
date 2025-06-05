@@ -4,4 +4,5 @@
 .idea
 */node_modules
 /backend/generated
+/backend/dist
 .env

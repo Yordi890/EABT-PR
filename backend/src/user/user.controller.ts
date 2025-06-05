@@ -1,35 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Get, Body } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { User as UserType } from '../../generated/prisma'; // Importa el tipo User correctamente
 
-@Controller('user')
+@Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private userService: UserService) {}
 
+  // Endpoint para crear un nuevo usuario
   @Post()
-  async createUser(@Body() body: { name: string; email: string; password: string }): Promise<User> {
-
+  async createUser(@Body() body: { identityCard: string; firstName: string; lastName: string; userName: string; password: string }): Promise<UserType> {
+    return this.userService.createUser(body);
   }
 
-
+  // Endpoint para buscar todos los usuarios
   @Get()
-  findAll() {
+  async findAll(): Promise<UserType[]> {
     return this.userService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
   }
 }
