@@ -22,3 +22,68 @@ model User {
   userName     String @unique
   password     String
 }
+
+model ProductionUnit {
+  id        Int        @id @default(autoincrement())
+  name      String
+  address   String
+  producers Producer[]
+}
+
+model Producer {
+  id               Int            @id @default(autoincrement())
+  dni              String         @unique
+  code             String         @unique
+  firstName        String
+  lastName1        String
+  lastName2        String
+  phone            String
+  productionUnitId Int
+  productionUnit   ProductionUnit @relation(fields: [productionUnitId], references: [id])
+  cupCard          Float
+  mlcCard          Float
+  landFiles        LandFile[]
+  Contract         Contract[]
+}
+
+model LandFile {
+  id             Int      @id @default(autoincrement())
+  producerId     Int
+  fileNumber     String
+  area           Float
+  propertyType   String
+  issueDate      DateTime
+  expirationDate DateTime
+  producer       Producer @relation(fields: [producerId], references: [id])
+}
+
+model Supply {
+  id             Int              @id @default(autoincrement())
+  name           String
+  quantity       Float
+  unit           String
+  price          Float
+  SupplyContract SupplyContract[]
+}
+
+model Contract {
+  id               Int              @id @default(autoincrement())
+  number           String           @unique
+  creationDate     DateTime         @default(now())
+  producerId       Int
+  plantingArea     Float
+  seedlingQuantity Float
+  plantingType     String
+  tobaccoType      String
+  producer         Producer         @relation(fields: [producerId], references: [id])
+  supplies         SupplyContract[]
+}
+
+model SupplyContract {
+  id         Int      @id @default(autoincrement())
+  contractId Int
+  supplyId   Int
+  quantity   Float
+  contract   Contract @relation(fields: [contractId], references: [id])
+  supply     Supply   @relation(fields: [supplyId], references: [id])
+}
