@@ -25,7 +25,7 @@ model User {
 
 model ProductionUnit {
   id        Int        @id @default(autoincrement())
-  name      String
+  name      String     @unique
   address   String
   producers Producer[]
 }

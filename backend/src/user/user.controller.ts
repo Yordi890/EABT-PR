@@ -2,7 +2,7 @@ import {Controller, Get, Post, Put, Delete, Body, Param} from '@nestjs/common';
 import {UserService} from './user.service';
 import {User as UserType} from '../../generated/prisma'; // Importa el tipo User correctamente
 
-@Controller('users')
+@Controller('user')
 export class UserController {
     constructor(private userService: UserService) {
     }
