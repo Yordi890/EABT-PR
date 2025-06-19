@@ -7,13 +7,19 @@ export class UserService {
     constructor(private readonly userRepository: UserRepository) {
     }
 
-    async createUser(data) {
-        return this.userRepository.saveUser(data);
+    async listAllUsers() {
+        return this.userRepository.retrieveAllUser();
     }
 
-
-    async findAll() {
-        return this.userRepository.findAllUser();
+    async addUser(data) {
+        return this.userRepository.insertUser(data);
     }
 
+    async modifyUser(dni, data) {
+        return this.userRepository.saveUser(dni, data);
+    }
+
+    async deleteUser(dni) {
+        return this.userRepository.removeUser(dni);
+    }
 }
