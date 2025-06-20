@@ -17,15 +17,17 @@ export class UserRepository {
     async saveUser(dni, data) {
         return this.prismaService.user.update({
             data: data,
-            where: {identityCard: dni}
+            where: {
+                identityCard: dni
+            }
         });
     }
 
     async removeUser(dni) {
-        return this.prismaService.user.delete(
-            {
-                where: {identityCard: dni},
-            }
-        );
+        return this.prismaService.user.delete({
+            where: {
+                identityCard: dni
+            },
+        });
     }
 }

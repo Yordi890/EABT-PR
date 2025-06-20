@@ -11,23 +11,23 @@ export class ProductionUnitRepository {
     }
 
     async insertProductionUnit(data) {
-        return this.prismaService.productionUnit.create(data);
+        return this.prismaService.productionUnit.create({data: data});
     }
 
     async saveProductionUnit(name, data) {
         return this.prismaService.productionUnit.update({
             data: data,
-            where: {name: name}
+            where: {
+                name: name
+            }
         });
     }
 
     async removeProductionUnit(name) {
-        return this.prismaService.productionUnit.delete(
-            {
-                where: {name: name}
+        return this.prismaService.productionUnit.delete({
+            where: {
+                name: name
             }
-        )
+        })
     }
-
-
 }
