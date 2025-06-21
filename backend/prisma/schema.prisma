@@ -59,7 +59,7 @@ model LandFile {
 
 model Supply {
   id             Int              @id @default(autoincrement())
-  name           String
+  name           String           @unique
   quantity       Float
   unit           String
   price          Float

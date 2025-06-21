@@ -1,5 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProductionUnitRepository } from './productionUnit.repository';
+import { ProductionUnit as ProductionUnitType } from '../../generated/prisma';
+import { ProductionUnitDto } from './dto/productionUnit.dto';
 
 @Injectable()
 export class ProductionUnitService {
@@ -7,19 +9,33 @@ export class ProductionUnitService {
     private readonly productionUnitRepository: ProductionUnitRepository,
   ) {}
 
-  async listAllProductionUnit() {
+  async listAllProductionUnit(): Promise<ProductionUnitType[]> {
     return this.productionUnitRepository.retrieveAllProductionUnit();
   }
 
-  async addProductionUnit(data) {
-    return this.productionUnitRepository.insertProductionUnit(data);
+  async addProductionUnit(productionUnit: ProductionUnitDto): Promise<void> {
+    await this.productionUnitRepository.insertProductionUnit(productionUnit);
   }
 
-  async modifyProductionUnit(name, data) {
-    return this.productionUnitRepository.saveProductionUnit(name, data);
+  async modifyProductionUnit(
+    name: string,
+    newProductionUnit: ProductionUnitDto,
+  ): Promise<void> {
+    try {
+      await this.productionUnitRepository.saveProductionUnit(
+        name,
+        newProductionUnit,
+      );
+    } catch (err) {
+      throw new NotFoundException("User doesn't exist");
+    }
   }
 
-  async deleteProductionUnit(name: string) {
-    return this.productionUnitRepository.removeProductionUnit(name);
+  async deleteProductionUnit(name: string): Promise<void> {
+    try {
+      await this.productionUnitRepository.removeProductionUnit(name);
+    } catch (err) {
+      throw new NotFoundException("Production unit doesn't exist");
+    }
   }
 }

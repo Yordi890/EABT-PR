@@ -6,43 +6,39 @@ import {
   Delete,
   Body,
   Param,
+  HttpCode,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User as UserType } from '../../generated/prisma'; // Importa el tipo User correctamente
+import { User as UserType } from '../../generated/prisma';
+import { UserDto } from './dto/user.dto';
 
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
 
-  // Endpoint para listar todos los usuarios
   @Get()
   async getAllUsers(): Promise<UserType[]> {
     return this.userService.listAllUsers();
   }
 
-  // Endpoint para crear un nuevo usuario
-  // TODO Ver si esta destructuración es realmente necesaria
   @Post()
-  async createUser(
-    @Body()
-    body: {
-      identityCard: string;
-      firstName: string;
-      lastName: string;
-      userName: string;
-      password: string;
-    },
-  ): Promise<UserType> {
-    return this.userService.addUser(body);
+  @HttpCode(201)
+  async createUser(@Body() user: UserDto): Promise<void> {
+    await this.userService.addUser(user);
   }
 
   @Put(':dni')
-  async updateUser(@Param('dni') dni: string, @Body() body) {
-    return this.userService.modifyUser(dni, body);
+  @HttpCode(204)
+  async updateUser(
+    @Param('dni') dni: string,
+    @Body() newUser: UserDto,
+  ): Promise<void> {
+    await this.userService.modifyUser(dni, newUser);
   }
 
   @Delete(':dni')
-  async deleteUser(@Param('dni') dni: string) {
-    return this.userService.deleteUser(dni);
+  @HttpCode(204)
+  async deleteUser(@Param('dni') dni: string): Promise<void> {
+    await this.userService.deleteUser(dni);
   }
 }

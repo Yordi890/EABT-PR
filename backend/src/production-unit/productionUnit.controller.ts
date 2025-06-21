@@ -6,30 +6,44 @@ import {
   Delete,
   Body,
   Param,
+  HttpCode,
 } from '@nestjs/common';
 import { ProductionUnitService } from './productionUnit.service';
+import { ProductionUnitDto } from './dto/productionUnit.dto';
+import { ProductionUnit as ProductionUnitType } from '../../generated/prisma';
 
 @Controller('productionUnit')
 export class ProductionUnitController {
   constructor(private readonly productionUnitService: ProductionUnitService) {}
 
   @Get()
-  async getAllProductionUnits() {
+  async getAllProductionUnits(): Promise<ProductionUnitType[]> {
     return this.productionUnitService.listAllProductionUnit();
   }
 
   @Post()
-  async createProductionUnit(@Body() body) {
-    return this.productionUnitService.addProductionUnit(body);
+  @HttpCode(201)
+  async createProductionUnit(
+    @Body() productionUnit: ProductionUnitDto,
+  ): Promise<void> {
+    await this.productionUnitService.addProductionUnit(productionUnit);
   }
 
   @Put(':name')
-  async updateProductionUnit(@Param('name') name: string, @Body() body) {
-    return this.productionUnitService.modifyProductionUnit(name, body);
+  @HttpCode(204)
+  async updateProductionUnit(
+    @Param('name') name: string,
+    @Body() newProductionUnit: ProductionUnitDto,
+  ): Promise<void> {
+    await this.productionUnitService.modifyProductionUnit(
+      name,
+      newProductionUnit,
+    );
   }
 
   @Delete(':name')
-  async deleteProductionUnit(@Param('name') name: string) {
-    return this.productionUnitService.deleteProductionUnit(name);
+  @HttpCode(204)
+  async deleteProductionUnit(@Param('name') name: string): Promise<void> {
+    await this.productionUnitService.deleteProductionUnit(name);
   }
 }
