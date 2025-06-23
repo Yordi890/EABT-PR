@@ -48,13 +48,13 @@ model Producer {
 
 model LandFile {
   id             Int      @id @default(autoincrement())
-  producerId     Int
-  fileNumber     String
+  producerdni    String
+  fileNumber     String   @unique
   area           Float
   propertyType   String
   issueDate      DateTime
   expirationDate DateTime
-  producer       Producer @relation(fields: [producerId], references: [id])
+  producer       Producer? @relation(fields: [producerdni], references: [dni])
 }
 
 model Supply {
