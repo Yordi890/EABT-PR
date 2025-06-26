@@ -1,6 +1,6 @@
 import {ConflictException, Injectable, NotFoundException} from '@nestjs/common';
 import {SupplyDto} from './dto/supply.dto';
-import {Supply as SupplyType} from '../../generated/prisma';
+import {SupplyModel} from '../../generated/prisma/models/Supply';
 import {SupplyRepository} from './supply.repository';
 
 @Injectable()
@@ -8,7 +8,7 @@ export class SupplyService {
     constructor(private readonly supplyRepository: SupplyRepository) {
     }
 
-    async listAllSupply(): Promise<SupplyType[]> {
+    async listAllSupply(): Promise<SupplyModel[]> {
         return await this.supplyRepository.retrieveAllSupply();
     }
 

@@ -9,7 +9,7 @@ import {
   HttpCode,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User as UserType } from '../../generated/prisma';
+import { UserModel } from '../../generated/prisma/models/User'
 import { UserDto } from './dto/user.dto';
 
 @Controller('user')
@@ -17,7 +17,7 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Get()
-  async getAllUsers(): Promise<UserType[]> {
+  async getAllUsers(): Promise<UserModel[]> {
     return this.userService.listAllUsers();
   }
 

@@ -1,6 +1,6 @@
 import {ConflictException, Injectable, NotFoundException} from '@nestjs/common';
 import {ProductionUnitRepository} from './productionUnit.repository';
-import {ProductionUnit as ProductionUnitType} from '../../generated/prisma';
+import {ProductionUnitModel} from '../../generated/prisma/models/ProductionUnit';
 import {ProductionUnitDto} from './dto/productionUnit.dto';
 
 @Injectable()
@@ -10,7 +10,7 @@ export class ProductionUnitService {
     ) {
     }
 
-    async listAllProductionUnit(): Promise<ProductionUnitType[]> {
+    async listAllProductionUnit(): Promise<ProductionUnitModel[]> {
         return this.productionUnitRepository.retrieveAllProductionUnit();
     }
 

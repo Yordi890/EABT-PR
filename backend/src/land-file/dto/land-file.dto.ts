@@ -19,10 +19,10 @@ export class LandFileDto {
 
     @IsDateString()
     @IsNotEmpty()
-    issueDate: Date;
+    issueDate: string;
 
     @IsDateString()
     @IsNotEmpty()
-    expirationDate: Date;
+    expirationDate: string;
 
 }

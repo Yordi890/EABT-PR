@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Supply as SuplyType } from '../../generated/prisma';
+import { SupplyModel} from '../../generated/prisma/models/Supply';
 import { SupplyDto } from './dto/supply.dto';
 
 @Injectable()
 export class SupplyRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async retrieveAllSupply(): Promise<SuplyType[]> {
+  async retrieveAllSupply(): Promise<SupplyModel[]> {
     return this.prismaService.supply.findMany();
   }
 

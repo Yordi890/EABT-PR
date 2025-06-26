@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { ProductionUnit as ProductionUnitType } from '../../generated/prisma';
+import {ProductionUnitModel} from '../../generated/prisma/models/ProductionUnit';
 import { ProductionUnitDto } from './dto/productionUnit.dto';
 
 @Injectable()
 export class ProductionUnitRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async retrieveAllProductionUnit(): Promise<ProductionUnitType[]> {
+  async retrieveAllProductionUnit(): Promise<ProductionUnitModel[]> {
     return await this.prismaService.productionUnit.findMany();
   }
 

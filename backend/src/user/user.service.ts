@@ -1,6 +1,6 @@
 import {ConflictException, Injectable, NotFoundException} from '@nestjs/common';
 import {UserRepository} from './user.repository';
-import {User as UserType} from '../../generated/prisma';
+import {UserModel} from '../../generated/prisma/models/User';
 import {UserDto} from './dto/user.dto';
 
 @Injectable()
@@ -8,7 +8,7 @@ export class UserService {
     constructor(private readonly userRepository: UserRepository) {
     }
 
-    async listAllUsers(): Promise<UserType[]> {
+    async listAllUsers(): Promise<UserModel[]> {
         return await this.userRepository.retrieveAllUser();
     }
 

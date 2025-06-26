@@ -9,7 +9,7 @@ import {
     HttpCode,
 } from '@nestjs/common';
 import {LandFileService} from './land-file.service';
-import {LandFile as LandFileType} from '../../generated/prisma'
+import {LandFileModel} from '../../generated/prisma/models/LandFile'
 import {LandFileDto} from "./dto/land-file.dto";
 
 @Controller('landFile')
@@ -18,7 +18,7 @@ export class LandFileController {
     }
 
     @Get()
-    async getAllLandFiles(): Promise<LandFileType[]> {
+    async getAllLandFiles(): Promise<LandFileModel[]> {
         return await this.landFileService.listAllLandFile();
     }
 

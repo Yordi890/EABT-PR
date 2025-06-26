@@ -6,9 +6,10 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { ProductionUnitModule } from '../production-unit/productionUnit.module';
 import { SupplyModule } from '../supply/supply.module';
 import {LandFileModule} from "../land-file/land-file.module";
+import {ConfigModule} from "@nestjs/config";
 
 @Module({
-  imports: [PrismaModule, UserModule, ProductionUnitModule, SupplyModule, LandFileModule],
+  imports: [ConfigModule.forRoot(), PrismaModule, UserModule, ProductionUnitModule, SupplyModule, LandFileModule],
   controllers: [AppController],
   providers: [AppService],
 })

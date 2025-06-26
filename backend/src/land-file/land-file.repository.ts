@@ -1,6 +1,6 @@
 import {Injectable} from "@nestjs/common";
 import {PrismaService} from "../prisma/prisma.service";
-import {LandFile as LandFileType} from '../../generated/prisma'
+import { LandFileModel} from '../../generated/prisma/models/LandFile'
 import {LandFileDto} from "./dto/land-file.dto";
 
 @Injectable()
@@ -10,7 +10,7 @@ export class LandFileRepository {
     constructor(private readonly prismaService: PrismaService) {
     }
 
-    async retrieveAllLandFiles(): Promise<LandFileType[]> {
+    async retrieveAllLandFiles(): Promise<LandFileModel[]> {
         return await this.prismaService.landFile.findMany();
     }
 

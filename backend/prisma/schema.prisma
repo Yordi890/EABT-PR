@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
   output   = "../generated/prisma"
 }
 
@@ -47,13 +47,13 @@ model Producer {
 }
 
 model LandFile {
-  id             Int      @id @default(autoincrement())
+  id             Int       @id @default(autoincrement())
   producerdni    String
-  fileNumber     String   @unique
+  fileNumber     String    @unique
   area           Float
   propertyType   String
-  issueDate      DateTime
-  expirationDate DateTime
+  issueDate      String
+  expirationDate String
   producer       Producer? @relation(fields: [producerdni], references: [dni])
 }
 
@@ -69,7 +69,7 @@ model Supply {
 model Contract {
   id               Int              @id @default(autoincrement())
   number           String           @unique
-  creationDate     DateTime         @default(now())
+  creationDate     String
   producerId       Int
   plantingArea     Float
   seedlingQuantity Float
@@ -80,10 +80,10 @@ model Contract {
 }
 
 model SupplyContract {
-  id         Int      @id @default(autoincrement())
-  contractId Int
-  supplyId   Int
-  quantity   Float
-  contract   Contract @relation(fields: [contractId], references: [id])
-  supply     Supply   @relation(fields: [supplyId], references: [id])
+  id          Int      @id @default(autoincrement())
+  contractId  Int
+  supplyId    Int
+  quantdatety Float
+  contract    Contract @relation(fields: [contractId], references: [id])
+  supply      Supply   @relation(fields: [supplyId], references: [id])
 }

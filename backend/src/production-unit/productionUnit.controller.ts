@@ -10,14 +10,14 @@ import {
 } from '@nestjs/common';
 import { ProductionUnitService } from './productionUnit.service';
 import { ProductionUnitDto } from './dto/productionUnit.dto';
-import { ProductionUnit as ProductionUnitType } from '../../generated/prisma';
+import { ProductionUnitModel} from '../../generated/prisma/models/ProductionUnit';
 
 @Controller('productionUnit')
 export class ProductionUnitController {
   constructor(private readonly productionUnitService: ProductionUnitService) {}
 
   @Get()
-  async getAllProductionUnits(): Promise<ProductionUnitType[]> {
+  async getAllProductionUnits(): Promise<ProductionUnitModel[]> {
     return this.productionUnitService.listAllProductionUnit();
   }
 

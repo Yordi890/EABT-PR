@@ -10,14 +10,14 @@ import {
 } from '@nestjs/common';
 import { SupplyService } from './supply.service';
 import { SupplyDto } from './dto/supply.dto';
-import { Supply as SupplyType } from '../../generated/prisma';
+import { SupplyModel} from '../../generated/prisma/models/Supply';
 
 @Controller('supply')
 export class SupplyController {
   constructor(private readonly supplyService: SupplyService) {}
 
   @Get()
-  async getAllSupply(): Promise<SupplyType[]> {
+  async getAllSupply(): Promise<SupplyModel[]> {
     return await this.supplyService.listAllSupply();
   }
 
