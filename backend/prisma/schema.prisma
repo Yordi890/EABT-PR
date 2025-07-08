@@ -40,8 +40,8 @@ model Producer {
   phone            String
   productionUnitId Int
   productionUnit   ProductionUnit @relation(fields: [productionUnitId], references: [id])
-  cupCard          Float
-  mlcCard          Float
+  cupCard          String
+  mlcCard          String
   landFiles        LandFile[]
   Contract         Contract[]
 }
