@@ -3,6 +3,7 @@
 
 .idea
 */node_modules
+coverage/
 /backend/generated
 /backend/dist
 backend/.env
