@@ -44,40 +44,42 @@ describe('UserRepository', () => {
             }];
             mockPrismaService.user.findMany.mockResolvedValue(result);
 
-            expect(await userRepository.retrieveAllUser()).toBe(result);
+            expect(await userRepository.retrieveAllUser()).toEqual(result);
             expect(mockPrismaService.user.findMany).toHaveBeenCalled();
         });
     });
 
     describe('insertUser', () => {
         it('should insert a user', async () => {
-            const userDto: UserDto = {
+            const newUser: UserDto = {
                 identityCard: '123456',
                 firstName: 'John',
                 lastName: 'Doe',
                 userName: 'johndoe',
                 password: 'password'
             };
-            await userRepository.insertUser(userDto);
 
-            expect(mockPrismaService.user.create).toHaveBeenCalledWith({data: userDto});
+            mockPrismaService.user.create.mockResolvedValue(newUser);
+
+            expect(await userRepository.insertUser(newUser)).toEqual(newUser);
+            expect(mockPrismaService.user.create).toHaveBeenCalledWith({data: newUser});
         });
     });
 
     describe('saveUser', () => {
         it('should update a user', async () => {
             const dni = '123456';
-            const newUser: UserDto = {
+            const user: UserDto = {
                 identityCard: '987654321',
                 firstName: 'Jane',
                 lastName: 'Doe',
                 userName: 'janedoe',
                 password: 'newpassword'
             };
-            await userRepository.saveUser(dni, newUser);
+            await userRepository.saveUser(dni, user);
 
             expect(mockPrismaService.user.update).toHaveBeenCalledWith({
-                data: newUser,
+                data: user,
                 where: {identityCard: dni},
             });
         });

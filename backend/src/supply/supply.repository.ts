@@ -11,8 +11,8 @@ export class SupplyRepository {
     return this.prismaService.supply.findMany();
   }
 
-  async insertSupply(supply: SupplyDto): Promise<void> {
-    await this.prismaService.supply.create({
+  async insertSupply(supply: SupplyDto): Promise<SupplyModel> {
+    return await this.prismaService.supply.create({
       data: supply,
     });
   }

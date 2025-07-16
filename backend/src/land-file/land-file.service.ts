@@ -2,6 +2,7 @@ import {Injectable} from '@nestjs/common';
 import {LandFileRepository} from "./land-file.repository";
 import {LandFileModel} from '../../generated/prisma/models/LandFile'
 import {LandFileDto} from "./dto/land-file.dto";
+import prismaHandler from "../utils/prisma-handler";
 
 @Injectable()
 export class LandFileService {
@@ -13,15 +14,27 @@ export class LandFileService {
     }
 
     async addLandFile(landFile: LandFileDto): Promise<void> {
-        await this.landFileRepository.insertLandFile(landFile);
+        try {
+            await this.landFileRepository.insertLandFile(landFile);
+        } catch (error) {
+            prismaHandler(error);
+        }
     }
 
     async modifyLandFile(fileNumber: string, newLandFile: LandFileDto): Promise<void> {
-        await this.landFileRepository.saveLandFile(fileNumber, newLandFile);
+        try {
+            await this.landFileRepository.saveLandFile(fileNumber, newLandFile);
+        } catch (error) {
+            prismaHandler(error);
+        }
     }
 
     async deleteLandFile(fileNumber: string): Promise<void> {
-        await this.landFileRepository.removeLandFile(fileNumber);
+        try {
+            await this.landFileRepository.removeLandFile(fileNumber);
+        } catch (error) {
+            prismaHandler(error);
+        }
     }
 
 }

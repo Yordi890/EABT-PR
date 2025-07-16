@@ -1,10 +1,15 @@
 import {NestFactory} from '@nestjs/core';
 import {AppModule} from './app/app.module';
-import {RequestMethod, ValidationPipe} from '@nestjs/common';
+import {ConsoleLogger, RequestMethod, ValidationPipe} from '@nestjs/common';
 import {ConfigService} from "@nestjs/config";
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create(AppModule, {
+        logger: new ConsoleLogger({
+            compact: true,
+            timestamp: true,
+        })
+    });
 
     const configService = app.get(ConfigService);
 
@@ -28,5 +33,3 @@ async function bootstrap() {
 }
 
 bootstrap()
-    .then((r) => console.log(`Server started successfully`))
-    .catch((err) => console.error('Server failed with error: %s', err));

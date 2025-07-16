@@ -1,7 +1,8 @@
-import {ConflictException, Injectable, NotFoundException} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {ProductionUnitRepository} from './productionUnit.repository';
 import {ProductionUnitModel} from '../../generated/prisma/models/ProductionUnit';
 import {ProductionUnitDto} from './dto/productionUnit.dto';
+import prismaHandler from "../utils/prisma-handler";
 
 @Injectable()
 export class ProductionUnitService {
@@ -17,8 +18,8 @@ export class ProductionUnitService {
     async addProductionUnit(productionUnit: ProductionUnitDto): Promise<void> {
         try {
             await this.productionUnitRepository.insertProductionUnit(productionUnit);
-        } catch (err) {
-            throw new ConflictException("Production Unit already exist");
+        } catch (error) {
+            prismaHandler(error);
         }
     }
 
@@ -31,16 +32,16 @@ export class ProductionUnitService {
                 name,
                 newProductionUnit,
             );
-        } catch (err) {
-            throw new NotFoundException("User doesn't exist");
+        } catch (error) {
+            prismaHandler(error);
         }
     }
 
     async deleteProductionUnit(name: string): Promise<void> {
         try {
             await this.productionUnitRepository.removeProductionUnit(name);
-        } catch (err) {
-            throw new NotFoundException("Production unit doesn't exist");
+        } catch (error) {
+            prismaHandler(error);
         }
     }
 }

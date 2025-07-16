@@ -42,10 +42,45 @@ describe('ProductionUnitRepository Tests', () => {
 
             mockPrismaService.productionUnit.findMany.mockResolvedValue(result);
 
-            expect(await productionUnitRepository.retrieveAllProductionUnit()).toBe(result);
+            expect(await productionUnitRepository.retrieveAllProductionUnit()).toEqual(result);
             expect(mockPrismaService.productionUnit.findMany).toHaveBeenCalled();
         });
     })
 
+    describe('insertProductionUnit', () => {
+        it('should insert a production unit', async () => {
+            const productionUnit = {name: 'Ceferino Lopez', address: 'Calle 5ta #8'}
+
+            mockPrismaService.productionUnit.create.mockResolvedValue(productionUnit);
+
+            expect(await productionUnitRepository.insertProductionUnit(productionUnit)).toEqual(productionUnit);
+            expect(mockPrismaService.productionUnit.create).toHaveBeenCalledWith({data: productionUnit});
+        })
+    })
+
+    describe('saveProductionUnit', () => {
+        it('should update a production unit', async () => {
+            const name: string = "Rafael Loynaz";
+            const productionUnit = {name: 'Ceferino Lopez', address: 'Calle 5ta #8'}
+
+
+            await productionUnitRepository.saveProductionUnit(name, productionUnit);
+            expect(mockPrismaService.productionUnit.update).toHaveBeenCalledWith({
+                data: productionUnit,
+                where: {name: name},
+            })
+        })
+    })
+
+    describe('removeProductionUnit', () => {
+        it('should remove a production unit', async () => {
+            const name: string = "Ceferino Lopez";
+
+            await productionUnitRepository.removeProductionUnit(name);
+            expect(mockPrismaService.productionUnit.delete).toHaveBeenCalledWith({
+                where: {name: name},
+            })
+        })
+    })
 
 })

@@ -11,8 +11,8 @@ export class ProductionUnitRepository {
     return await this.prismaService.productionUnit.findMany();
   }
 
-  async insertProductionUnit(productionUnit: ProductionUnitDto): Promise<void> {
-    await this.prismaService.productionUnit.create({ data: productionUnit });
+  async insertProductionUnit(productionUnit: ProductionUnitDto): Promise<ProductionUnitModel> {
+    return await this.prismaService.productionUnit.create({ data: productionUnit });
   }
 
   async saveProductionUnit(

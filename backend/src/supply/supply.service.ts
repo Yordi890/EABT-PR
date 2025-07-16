@@ -1,7 +1,8 @@
-import {ConflictException, Injectable, NotFoundException} from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import {SupplyDto} from './dto/supply.dto';
 import {SupplyModel} from '../../generated/prisma/models/Supply';
 import {SupplyRepository} from './supply.repository';
+import prismaHandler from "../utils/prisma-handler";
 
 @Injectable()
 export class SupplyService {
@@ -15,24 +16,24 @@ export class SupplyService {
     async addSupply(newSupply: SupplyDto): Promise<void> {
         try {
             await this.supplyRepository.insertSupply(newSupply);
-        } catch (err) {
-            throw new ConflictException("Supply already exist");
+        } catch (error) {
+            prismaHandler(error);
         }
     }
 
     async modifySupply(name: string, newSupply: SupplyDto): Promise<void> {
         try {
             await this.supplyRepository.saveSupply(name, newSupply);
-        } catch (err) {
-            throw new NotFoundException("User doesn't exist");
+        } catch (error) {
+            prismaHandler(error);
         }
     }
 
     async deleteSupply(name: string): Promise<void> {
         try {
             await this.supplyRepository.removeSupply(name);
-        } catch (err) {
-            throw new NotFoundException("Supply doesn't exist");
+        } catch (error) {
+            prismaHandler(error);
         }
     }
 }

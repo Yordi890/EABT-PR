@@ -11,8 +11,8 @@ export class UserRepository {
     return await this.prismaService.user.findMany();
   }
 
-  async insertUser(user: UserDto): Promise<void> {
-    await this.prismaService.user.create({ data: user });
+  async insertUser(user: UserDto): Promise<UserModel> {
+     return await this.prismaService.user.create({ data: user });
   }
 
   async saveUser(dni: string, newUser: UserDto): Promise<void> {
