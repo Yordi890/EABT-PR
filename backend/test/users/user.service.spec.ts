@@ -2,7 +2,7 @@ import {Test, TestingModule} from '@nestjs/testing';
 import {UserService} from '../../src/user/user.service';
 import {UserRepository} from '../../src/user/user.repository';
 import {UserDto} from '../../src/user/dto/user.dto';
-import {ConflictException, NotFoundException, ArgumentsHost} from '@nestjs/common';
+import {ConflictException, NotFoundException} from '@nestjs/common';
 import {UserModel} from '../../generated/prisma/models/User';
 import {PrismaClientKnownRequestError} from '@prisma/client/runtime/library';
 

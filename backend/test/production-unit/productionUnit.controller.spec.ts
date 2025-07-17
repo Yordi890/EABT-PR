@@ -18,7 +18,7 @@ describe('ProductionUnitController', () => {
 
 
     beforeEach(async () => {
-        const module = await Test.createTestingModule({
+        const module: TestingModule = await Test.createTestingModule({
             providers: [
                 ProductionUnitController,
                 {provide: ProductionUnitService, useValue: mockProductionService},
@@ -37,8 +37,8 @@ describe('ProductionUnitController', () => {
 
     describe('getAllProductionUnits', () => {
         it('should return an array of production unit', async () => {
-            const result = [
-                {id: 1, name: 'Ceferino Lopez', address: 'Calle 5ta #8'}
+            const result: ProductionUnitModel[] = [
+                {id: 1, name: 'Ceferino Lopez', address: 'Calle 5ta #8'},
             ]
             mockProductionService.listAllProductionUnit.mockResolvedValue(result);
 
@@ -67,7 +67,7 @@ describe('ProductionUnitController', () => {
     })
 
     describe('deleteProductionUnit', () => {
-        it('should delete a production unit',async () => {
+        it('should delete a production unit', async () => {
             const name: string = 'Augusto Lopez';
 
             await productionUnitController.deleteProductionUnit(name);

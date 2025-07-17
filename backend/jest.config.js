@@ -8,13 +8,14 @@ module.exports = {
     },
 
     collectCoverageFrom: [
-        "!**/node_modules/**", // Excluir la carpeta node_modules
-        "!**/test/**", // Excluir la carpeta test
-        "!**/generated/**", // Excluir la carpeta generated
-        "!**/dist/**", // Excluir la carpeta dist
-        "!**/coverage/**", // Excluir la carpeta dist
-        "!**/dto/**", // Excluir todas las carpetas dto en cualquier módulo
-        "!jest.config.js" // Excluir el archivo jest.config.js
+        "!**/node_modules/**",
+        "!**/test/**",
+        "!**/generated/**",
+        "!**/dist/**",
+        "!**/coverage/**",
+        "!**/dto/**",
+        "!jest.config.js",
+        "!**/src/main.ts"
     ],
 
     coverageDirectory: "coverage",
