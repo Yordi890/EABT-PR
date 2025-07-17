@@ -31,19 +31,19 @@ model ProductionUnit {
 }
 
 model Producer {
-  id               Int            @id @default(autoincrement())
-  dni              String         @unique
-  code             String         @unique
-  firstName        String
-  lastName1        String
-  lastName2        String
-  phone            String
-  productionUnitId Int
-  productionUnit   ProductionUnit @relation(fields: [productionUnitId], references: [id])
-  cupCard          String
-  mlcCard          String
-  landFiles        LandFile[]
-  Contract         Contract[]
+  id                 Int            @id @default(autoincrement())
+  dni                String         @unique
+  code               String         @unique
+  firstName          String
+  lastName1          String
+  lastName2          String
+  phone              String
+  productionUnitName String
+  productionUnit     ProductionUnit @relation(fields: [productionUnitName], references: [name])
+  cupCard            String
+  mlcCard            String
+  landFiles          LandFile[]
+  Contract           Contract[]
 }
 
 model LandFile {
