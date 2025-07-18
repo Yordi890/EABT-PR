@@ -31,15 +31,15 @@ model ProductionUnit {
 }
 
 model Producer {
-  id                 Int            @id @default(autoincrement())
-  dni                String         @unique
-  code               String         @unique
+  id                 Int             @id @default(autoincrement())
+  dni                String          @unique
+  code               String          @unique
   firstName          String
   lastName1          String
   lastName2          String
   phone              String
-  productionUnitName String
-  productionUnit     ProductionUnit @relation(fields: [productionUnitName], references: [name])
+  productionUnitName String?
+  productionUnit     ProductionUnit? @relation(fields: [productionUnitName], references: [name])
   cupCard            String
   mlcCard            String
   landFiles          LandFile[]
