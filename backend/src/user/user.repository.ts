@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import {UserModel} from '../../generated/prisma/models/User';
+import { UserModel } from '../../generated/prisma/models/User';
 import { UserDto } from './dto/user.dto';
 
 @Injectable()
@@ -12,7 +12,7 @@ export class UserRepository {
   }
 
   async insertUser(user: UserDto): Promise<UserModel> {
-     return await this.prismaService.user.create({ data: user });
+    return await this.prismaService.user.create({ data: user });
   }
 
   async saveUser(dni: string, newUser: UserDto): Promise<void> {

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import {ProductionUnitModel} from '../../generated/prisma/models/ProductionUnit';
+import { ProductionUnitModel } from '../../generated/prisma/models/ProductionUnit';
 import { ProductionUnitDto } from './dto/productionUnit.dto';
 
 @Injectable()
@@ -11,8 +11,12 @@ export class ProductionUnitRepository {
     return await this.prismaService.productionUnit.findMany();
   }
 
-  async insertProductionUnit(productionUnit: ProductionUnitDto): Promise<ProductionUnitModel> {
-    return await this.prismaService.productionUnit.create({ data: productionUnit });
+  async insertProductionUnit(
+    productionUnit: ProductionUnitDto,
+  ): Promise<ProductionUnitModel> {
+    return await this.prismaService.productionUnit.create({
+      data: productionUnit,
+    });
   }
 
   async saveProductionUnit(

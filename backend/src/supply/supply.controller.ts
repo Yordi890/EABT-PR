@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { SupplyService } from './supply.service';
 import { SupplyDto } from './dto/supply.dto';
-import { SupplyModel} from '../../generated/prisma/models/Supply';
+import { SupplyModel } from '../../generated/prisma/models/Supply';
 
 @Controller('supply')
 export class SupplyController {

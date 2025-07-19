@@ -11,34 +11,34 @@ import { ProducerModule } from '../../src/producer/producer.module';
 import { ConfigModule } from '@nestjs/config';
 
 describe('AppModule', () => {
-    let module: TestingModule;
+  let module: TestingModule;
 
-    beforeEach(async () => {
-        module = await Test.createTestingModule({
-            imports: [
-                AppModule,
-                ConfigModule,
-                PrismaModule,
-                UserModule,
-                ProductionUnitModule,
-                SupplyModule,
-                LandFileModule,
-                ProducerModule,
-            ],
-        }).compile();
-    });
+  beforeEach(async () => {
+    module = await Test.createTestingModule({
+      imports: [
+        AppModule,
+        ConfigModule,
+        PrismaModule,
+        UserModule,
+        ProductionUnitModule,
+        SupplyModule,
+        LandFileModule,
+        ProducerModule,
+      ],
+    }).compile();
+  });
 
-    it('should be defined', () => {
-        expect(module).toBeDefined();
-    });
+  it('should be defined', () => {
+    expect(module).toBeDefined();
+  });
 
-    it('should contain the AppController', () => {
-        const appController = module.get<AppController>(AppController);
-        expect(appController).toBeDefined();
-    });
+  it('should contain the AppController', () => {
+    const appController = module.get<AppController>(AppController);
+    expect(appController).toBeDefined();
+  });
 
-    it('should contain the AppService', () => {
-        const appService = module.get<AppService>(AppService);
-        expect(appService).toBeDefined();
-    });
+  it('should contain the AppService', () => {
+    const appService = module.get<AppService>(AppService);
+    expect(appService).toBeDefined();
+  });
 });

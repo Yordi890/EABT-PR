@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { ProductionUnitService } from './productionUnit.service';
 import { ProductionUnitDto } from './dto/productionUnit.dto';
-import { ProductionUnitModel} from '../../generated/prisma/models/ProductionUnit';
+import { ProductionUnitModel } from '../../generated/prisma/models/ProductionUnit';
 
 @Controller('productionUnit')
 export class ProductionUnitController {
