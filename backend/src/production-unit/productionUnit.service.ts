@@ -11,7 +11,7 @@ export class ProductionUnitService {
   ) {}
 
   async listAllProductionUnit(): Promise<ProductionUnitModel[]> {
-    return this.productionUnitRepository.retrieveAllProductionUnit();
+    return await this.productionUnitRepository.retrieveAllProductionUnit();
   }
 
   async addProductionUnit(productionUnit: ProductionUnitDto): Promise<void> {

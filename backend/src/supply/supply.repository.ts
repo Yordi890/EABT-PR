@@ -12,7 +12,7 @@ export class SupplyRepository {
   }
 
   async insertSupply(supply: SupplyDto): Promise<SupplyModel> {
-    return await this.prismaService.supply.create({
+    return this.prismaService.supply.create({
       data: supply,
     });
   }

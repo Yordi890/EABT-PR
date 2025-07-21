@@ -18,7 +18,7 @@ export class UserController {
 
   @Get()
   async getAllUsers(): Promise<UserModel[]> {
-    return this.userService.listAllUsers();
+    return await this.userService.listAllUsers();
   }
 
   @Post()

@@ -8,11 +8,11 @@ export class UserRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   async retrieveAllUser(): Promise<UserModel[]> {
-    return await this.prismaService.user.findMany();
+    return this.prismaService.user.findMany();
   }
 
   async insertUser(user: UserDto): Promise<UserModel> {
-    return await this.prismaService.user.create({ data: user });
+    return this.prismaService.user.create({ data: user });
   }
 
   async saveUser(dni: string, newUser: UserDto): Promise<void> {

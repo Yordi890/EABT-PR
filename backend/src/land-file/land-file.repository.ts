@@ -5,11 +5,10 @@ import { LandFileDto } from './dto/land-file.dto';
 
 @Injectable()
 export class LandFileRepository {
-  private fecha: Date = new Date();
   constructor(private readonly prismaService: PrismaService) {}
 
   async retrieveAllLandFiles(): Promise<LandFileModel[]> {
-    return await this.prismaService.landFile.findMany();
+    return this.prismaService.landFile.findMany();
   }
 
   async insertLandFile(landFile: LandFileDto): Promise<void> {

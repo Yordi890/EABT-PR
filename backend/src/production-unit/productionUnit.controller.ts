@@ -18,7 +18,7 @@ export class ProductionUnitController {
 
   @Get()
   async getAllProductionUnits(): Promise<ProductionUnitModel[]> {
-    return this.productionUnitService.listAllProductionUnit();
+    return await this.productionUnitService.listAllProductionUnit();
   }
 
   @Post()

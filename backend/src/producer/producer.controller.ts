@@ -31,7 +31,7 @@ export class ProducerController {
   @Put(':dni')
   @HttpCode(204)
   async updateProducer(
-    @Param('dni') dni,
+    @Param('dni') dni: string,
     @Body() newProducer: ProducerDto,
   ): Promise<void> {
     await this.producerService.modifyProducer(dni, newProducer);

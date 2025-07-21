@@ -8,13 +8,13 @@ export class ProductionUnitRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   async retrieveAllProductionUnit(): Promise<ProductionUnitModel[]> {
-    return await this.prismaService.productionUnit.findMany();
+    return this.prismaService.productionUnit.findMany();
   }
 
   async insertProductionUnit(
     productionUnit: ProductionUnitDto,
   ): Promise<ProductionUnitModel> {
-    return await this.prismaService.productionUnit.create({
+    return this.prismaService.productionUnit.create({
       data: productionUnit,
     });
   }

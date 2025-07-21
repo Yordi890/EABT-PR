@@ -30,7 +30,7 @@ export class LandFileController {
   @Put(':fileNumber')
   @HttpCode(204)
   async updateLandFile(
-    @Param('fileNumber') fileNumber,
+    @Param('fileNumber') fileNumber: string,
     @Body() newlandFile: LandFileDto,
   ): Promise<void> {
     await this.landFileService.modifyLandFile(fileNumber, newlandFile);
