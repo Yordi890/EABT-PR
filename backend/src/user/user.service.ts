@@ -28,7 +28,7 @@ export class UserService {
   async listAllUsers(): Promise<UserModel[]> {
     this.logger.log('Intentando listar todos los usuarios');
     try {
-      const users = await this.userRepository.retrieveAllUser();
+      const users: UserModel[] = await this.userRepository.retrieveAllUser();
       this.logger.log('Usuarios listados exitosamente');
       return users;
     } catch (error) {
