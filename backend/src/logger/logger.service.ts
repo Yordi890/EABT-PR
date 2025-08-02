@@ -27,18 +27,18 @@ export class LoggerService {
     });
   }
 
-  log(obj) {
-    // this.logger.info(message);
+  log(message: string = '', obj?: any) {
     const objString = inspect(obj, {
       showHidden: false,
       depth: null,
       // colors: true,
     }).replace(/\n/g, '');
-    this.logger.info(objString);
+
+    this.logger.info(obj === undefined ? message : `${message} ${objString}`);
   }
 
-  error(message: string, trace: string) {
-    this.logger.error(message, { trace });
+  error(message: string) {
+    this.logger.error(message);
   }
 
   warn(message: string) {
