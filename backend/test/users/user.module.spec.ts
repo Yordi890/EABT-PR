@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserModule } from '../../src/user/user.module';
-import { UserController } from '../../src/user/user.controller';
-import { UserService } from '../../src/user/user.service';
-import { UserRepository } from '../../src/user/user.repository';
+import { UserModule } from '../../src/users/user.module';
+import { UserController } from '../../src/users/user.controller';
+import { UserService } from '../../src/users/user.service';
+import { UserRepository } from '../../src/users/user.repository';
 import { PrismaModule } from '../../src/prisma/prisma.module';
 
 describe('UserModule', () => {

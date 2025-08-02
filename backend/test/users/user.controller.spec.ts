@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserController } from '../../src/user/user.controller';
-import { UserService } from '../../src/user/user.service';
+import { UserController } from '../../src/users/user.controller';
+import { UserService } from '../../src/users/user.service';
 import { UserModel } from '../../generated/prisma/models/User';
-import { UserDto } from '../../src/user/dto/user.dto';
+import { UserDto } from '../../src/users/dto/user.dto';
 
 describe('UserController', () => {
   let userController: UserController;
@@ -52,7 +52,7 @@ describe('UserController', () => {
   });
 
   describe('createUser', () => {
-    it('should create a user', async () => {
+    it('should create a users', async () => {
       const user: UserDto = {
         identityCard: '123456',
         firstName: 'John',
@@ -67,7 +67,7 @@ describe('UserController', () => {
   });
 
   describe('updateUser', () => {
-    it('should update a user', async () => {
+    it('should update a users', async () => {
       const dni: string = '123456';
       const newUser: UserDto = {
         identityCard: '987654321',
@@ -83,7 +83,7 @@ describe('UserController', () => {
   });
 
   describe('deleteUser', () => {
-    it('should delete a user', async () => {
+    it('should delete a users', async () => {
       const dni: string = '12345678';
 
       await userController.deleteUser(dni);

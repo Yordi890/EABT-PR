@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ProductionUnitService } from '../../src/production-unit/productionUnit.service';
-import { ProductionUnitRepository } from '../../src/production-unit/productionUnit.repository';
-import { ProductionUnitDto } from '../../src/production-unit/dto/productionUnit.dto';
+import { ProductionUnitService } from '../../src/production-units/productionUnit.service';
+import { ProductionUnitRepository } from '../../src/production-units/productionUnit.repository';
+import { ProductionUnitDto } from '../../src/production-units/dto/productionUnit.dto';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { ProductionUnitModel } from '../../generated/prisma/models/ProductionUnit';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';

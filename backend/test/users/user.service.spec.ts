@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserService } from '../../src/user/user.service';
-import { UserRepository } from '../../src/user/user.repository';
-import { UserDto } from '../../src/user/dto/user.dto';
+import { UserService } from '../../src/users/user.service';
+import { UserRepository } from '../../src/users/user.repository';
+import { UserDto } from '../../src/users/dto/user.dto';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { UserModel } from '../../generated/prisma/models/User';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
@@ -53,7 +53,7 @@ describe('UserService', () => {
   });
 
   describe('addUser', () => {
-    it('should add a user', async () => {
+    it('should add a users', async () => {
       const userDto: UserDto = {
         identityCard: '123456',
         firstName: 'John',
@@ -66,7 +66,7 @@ describe('UserService', () => {
       expect(mockUserRepository.insertUser).toHaveBeenCalledWith(userDto);
     });
 
-    it('should throw ConflictException if user already exists', async () => {
+    it('should throw ConflictException if users already exists', async () => {
       const userDto: UserDto = {
         identityCard: '123456',
         firstName: 'John',
@@ -88,7 +88,7 @@ describe('UserService', () => {
   });
 
   describe('modifyUser', () => {
-    it('should modify a user', async () => {
+    it('should modify a users', async () => {
       const dni = '123456';
       const newUser: UserDto = {
         identityCard: '987654321',
@@ -102,7 +102,7 @@ describe('UserService', () => {
       expect(mockUserRepository.saveUser).toHaveBeenCalledWith(dni, newUser);
     });
 
-    it('should throw NotFoundException if user does not exist', async () => {
+    it('should throw NotFoundException if users does not exist', async () => {
       const dni = '123456';
       const newUser: UserDto = {
         identityCard: '987654321',
@@ -125,7 +125,7 @@ describe('UserService', () => {
   });
 
   describe('deleteUser', () => {
-    it('should delete a user', async () => {
+    it('should delete a users', async () => {
       const dni = '123456';
       mockUserRepository.removeUser.mockResolvedValue(undefined);
 
@@ -133,7 +133,7 @@ describe('UserService', () => {
       expect(mockUserRepository.removeUser).toHaveBeenCalledWith(dni);
     });
 
-    it('should throw NotFoundException if user does not exist', async () => {
+    it('should throw NotFoundException if users does not exist', async () => {
       const dni = '123456';
       mockUserRepository.removeUser.mockRejectedValue(
         new PrismaClientKnownRequestError('Not found', {

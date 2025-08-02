@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserRepository } from '../../src/user/user.repository';
+import { UserRepository } from '../../src/users/user.repository';
 import { PrismaService } from '../../src/prisma/prisma.service';
-import { UserDto } from '../../src/user/dto/user.dto';
+import { UserDto } from '../../src/users/dto/user.dto';
 
 describe('UserRepository', () => {
   let userRepository: UserRepository;
@@ -52,7 +52,7 @@ describe('UserRepository', () => {
   });
 
   describe('insertUser', () => {
-    it('should insert a user', async () => {
+    it('should insert a users', async () => {
       const newUser: UserDto = {
         identityCard: '123456',
         firstName: 'John',
@@ -71,7 +71,7 @@ describe('UserRepository', () => {
   });
 
   describe('saveUser', () => {
-    it('should update a user', async () => {
+    it('should update a users', async () => {
       const dni = '123456';
       const user: UserDto = {
         identityCard: '987654321',
@@ -90,7 +90,7 @@ describe('UserRepository', () => {
   });
 
   describe('removeUser', () => {
-    it('should remove a user', async () => {
+    it('should remove a users', async () => {
       const dni = '123456';
       await userRepository.removeUser(dni);
 

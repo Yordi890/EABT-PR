@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SupplyService } from '../../src/supply/supply.service';
-import { SupplyRepository } from '../../src/supply/supply.repository';
-import { SupplyDto } from '../../src/supply/dto/supply.dto';
+import { SupplyService } from '../../src/supplies/supply.service';
+import { SupplyRepository } from '../../src/supplies/supply.repository';
+import { SupplyDto } from '../../src/supplies/dto/supply.dto';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { SupplyModel } from '../../generated/prisma/models/Supply';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
@@ -52,7 +52,7 @@ describe('SupplyService', () => {
   });
 
   describe('addSupply', () => {
-    it('should add a supply', async () => {
+    it('should add a supplies', async () => {
       const supplyDto: SupplyDto = {
         name: 'abono',
         quantity: 3,
@@ -64,7 +64,7 @@ describe('SupplyService', () => {
       expect(mockSupplyRepository.insertSupply).toHaveBeenCalledWith(supplyDto);
     });
 
-    it('should throw ConflictException if supply already exists', async () => {
+    it('should throw ConflictException if supplies already exists', async () => {
       const supplyDto: SupplyDto = {
         name: 'abono',
         quantity: 3,
@@ -86,7 +86,7 @@ describe('SupplyService', () => {
   });
 
   describe('modifySupply', () => {
-    it('should modify a supply', async () => {
+    it('should modify a supplies', async () => {
       const name = 'pesticida';
       const newSupply: SupplyDto = {
         name: 'abono',
@@ -102,7 +102,7 @@ describe('SupplyService', () => {
       );
     });
 
-    it('should throw NotFoundException if supply does not exist', async () => {
+    it('should throw NotFoundException if supplies does not exist', async () => {
       const name = 'pesticida';
       const newSupply: SupplyDto = {
         name: 'abono',
@@ -125,7 +125,7 @@ describe('SupplyService', () => {
   });
 
   describe('deleteSupply', () => {
-    it('should delete a supply', async () => {
+    it('should delete a supplies', async () => {
       const name = 'abono';
       mockSupplyRepository.removeSupply.mockResolvedValue(undefined);
 
@@ -133,7 +133,7 @@ describe('SupplyService', () => {
       expect(mockSupplyRepository.removeSupply).toHaveBeenCalledWith(name);
     });
 
-    it('should throw NotFoundException if supply does not exist', async () => {
+    it('should throw NotFoundException if supplies does not exist', async () => {
       const name = 'abono';
 
       mockSupplyRepository.removeSupply.mockRejectedValue(

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ProductionUnitRepository } from '../../src/production-unit/productionUnit.repository';
+import { ProductionUnitRepository } from '../../src/production-units/productionUnit.repository';
 import { PrismaService } from '../../src/prisma/prisma.service';
-import { ProductionUnitDto } from '../../src/production-unit/dto/productionUnit.dto';
+import { ProductionUnitDto } from '../../src/production-units/dto/productionUnit.dto';
 
 describe('ProductionUnitRepository Tests', () => {
   let productionUnitRepository: ProductionUnitRepository;

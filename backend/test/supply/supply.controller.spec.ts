@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SupplyController } from '../../src/supply/supply.controller';
-import { SupplyService } from '../../src/supply/supply.service';
+import { SupplyController } from '../../src/supplies/supply.controller';
+import { SupplyService } from '../../src/supplies/supply.service';
 import { SupplyModel } from '../../generated/prisma/models/Supply';
-import { SupplyDto } from '../../src/supply/dto/supply.dto';
+import { SupplyDto } from '../../src/supplies/dto/supply.dto';
 
 describe('SupplyController', () => {
   let supplyController: SupplyController;
@@ -51,7 +51,7 @@ describe('SupplyController', () => {
   });
 
   describe('createSupply', () => {
-    it('should create a supply', async () => {
+    it('should create a supplies', async () => {
       const supply: SupplyDto = {
         name: 'abono',
         quantity: 3,
@@ -65,7 +65,7 @@ describe('SupplyController', () => {
   });
 
   describe('updateSupply', () => {
-    it('should update a supply', async () => {
+    it('should update a supplies', async () => {
       const name: string = 'Supply 1';
       const newSupply: SupplyDto = {
         name: 'abono',
@@ -83,7 +83,7 @@ describe('SupplyController', () => {
   });
 
   describe('deleteSupply', () => {
-    it('should delete a supply', async () => {
+    it('should delete a supplies', async () => {
       const name: string = 'abono';
 
       await supplyController.deleteSupply(name);

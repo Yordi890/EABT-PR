@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ProductionUnitModule } from '../../src/production-unit/productionUnit.module';
-import { ProductionUnitController } from '../../src/production-unit/productionUnit.controller';
-import { ProductionUnitService } from '../../src/production-unit/productionUnit.service';
-import { ProductionUnitRepository } from '../../src/production-unit/productionUnit.repository';
+import { ProductionUnitModule } from '../../src/production-units/productionUnit.module';
+import { ProductionUnitController } from '../../src/production-units/productionUnit.controller';
+import { ProductionUnitService } from '../../src/production-units/productionUnit.service';
+import { ProductionUnitRepository } from '../../src/production-units/productionUnit.repository';
 import { PrismaModule } from '../../src/prisma/prisma.module';
 
 describe('ProductionUnitModule', () => {

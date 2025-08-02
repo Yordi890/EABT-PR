@@ -2,12 +2,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from '../../src/app/app.module';
 import { AppController } from '../../src/app/app.controller';
 import { AppService } from '../../src/app/app.service';
-import { UserModule } from '../../src/user/user.module';
-import { ProductionUnitModule } from '../../src/production-unit/productionUnit.module';
-import { SupplyModule } from '../../src/supply/supply.module';
-import { LandFileModule } from '../../src/land-file/land-file.module';
+import { UserModule } from '../../src/users/user.module';
+import { ProductionUnitModule } from '../../src/production-units/productionUnit.module';
+import { SupplyModule } from '../../src/supplies/supply.module';
+import { LandFileModule } from '../../src/land-files/land-file.module';
 import { PrismaModule } from '../../src/prisma/prisma.module';
-import { ProducerModule } from '../../src/producer/producer.module';
+import { ProducerModule } from '../../src/producers/producer.module';
 import { ConfigModule } from '@nestjs/config';
 
 describe('AppModule', () => {

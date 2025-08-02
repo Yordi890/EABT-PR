@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SupplyModule } from '../../src/supply/supply.module';
-import { SupplyController } from '../../src/supply/supply.controller';
-import { SupplyService } from '../../src/supply/supply.service';
-import { SupplyRepository } from '../../src/supply/supply.repository';
+import { SupplyModule } from '../../src/supplies/supply.module';
+import { SupplyController } from '../../src/supplies/supply.controller';
+import { SupplyService } from '../../src/supplies/supply.service';
+import { SupplyRepository } from '../../src/supplies/supply.repository';
 import { PrismaModule } from '../../src/prisma/prisma.module';
 
 describe('SupplyModule', () => {

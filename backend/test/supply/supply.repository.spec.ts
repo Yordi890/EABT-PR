@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SupplyRepository } from '../../src/supply/supply.repository';
+import { SupplyRepository } from '../../src/supplies/supply.repository';
 import { PrismaService } from '../../src/prisma/prisma.service';
-import { SupplyDto } from '../../src/supply/dto/supply.dto';
+import { SupplyDto } from '../../src/supplies/dto/supply.dto';
 
 describe('SupplyRepository', () => {
   let supplyRepository: SupplyRepository;
@@ -51,7 +51,7 @@ describe('SupplyRepository', () => {
   });
 
   describe('insertSupply', () => {
-    it('should insert a supply', async () => {
+    it('should insert a supplies', async () => {
       const newSupply: SupplyDto = {
         name: 'abono',
         quantity: 3,
@@ -68,7 +68,7 @@ describe('SupplyRepository', () => {
   });
 
   describe('saveSupply', () => {
-    it('should update a supply', async () => {
+    it('should update a supplies', async () => {
       const name: string = 'abono';
 
       const newSupply: SupplyDto = {
@@ -87,7 +87,7 @@ describe('SupplyRepository', () => {
   });
 
   describe('removeSupply', () => {
-    it('should delete a supply', async () => {
+    it('should delete a supplies', async () => {
       const name = 'abono';
 
       await supplyRepository.removeSupply(name);

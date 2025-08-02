@@ -13,7 +13,7 @@ import { ProducerService } from './producer.service';
 import { ProducerModel } from 'generated/prisma/models/Producer';
 import { ProducerDto } from './dto/producer.dto';
 
-@Controller('producer')
+@Controller('producers')
 export class ProducerController {
   constructor(private readonly producerService: ProducerService) {}
 
