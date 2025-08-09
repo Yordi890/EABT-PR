@@ -4,6 +4,7 @@ import { UserModel } from '../../generated/prisma/models/User';
 import { UserDto } from './dto/user.dto';
 import prismaHandler from '../utils/prisma-handler';
 import { LoggerService } from '../logger/logger.service';
+import * as bcrypt from 'bcrypt';
 
 /**
  * Servicio para gestionar operaciones relacionadas con los usuarios.
@@ -20,6 +21,10 @@ export class UserService {
     private readonly userRepository: UserRepository,
     private readonly logger: LoggerService,
   ) {}
+
+  async getUserByUsername(userName: string): Promise<UserModel | null> {
+    return this.userRepository.retrieveUserByUsername(userName);
+  }
 
   /**
    * Lista todos los usuarios disponibles.
@@ -45,6 +50,9 @@ export class UserService {
    */
   async addUser(user: UserDto): Promise<void> {
     this.logger.log(`Intentando crear usuario con DNI: ${user.identityCard}`);
+
+    user.password = await bcrypt.hash(user.password, 10);
+
     try {
       const userCreated: UserModel = await this.userRepository.insertUser(user);
       this.logger.log('Usuario creado', userCreated);

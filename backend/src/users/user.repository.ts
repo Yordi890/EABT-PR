@@ -7,6 +7,14 @@ import { UserDto } from './dto/user.dto';
 export class UserRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
+  async retrieveUserByUsername(userName: string): Promise<UserModel | null> {
+    return this.prismaService.user.findFirst({
+      where: {
+        userName,
+      },
+    });
+  }
+
   async retrieveAllUser(): Promise<UserModel[]> {
     return this.prismaService.user.findMany();
   }
