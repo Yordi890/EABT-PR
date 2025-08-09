@@ -9,11 +9,13 @@ import { ProductionUnitModule } from '../production-units/productionUnit.module'
 import { SupplyModule } from '../supplies/supply.module';
 import { LandFileModule } from '../land-files/land-file.module';
 import { ProducerModule } from '../producers/producer.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     PrismaModule,
+    AuthModule,
     LoggerModule,
     UserModule,
     ProductionUnitModule,
