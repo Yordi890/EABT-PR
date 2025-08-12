@@ -4,13 +4,15 @@ import { UserRepository } from '../../src/users/user.repository';
 import { UserDto } from '../../src/users/dto/user.dto';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { UserModel } from '../../generated/prisma/models/User';
+import { LoggerService } from '../../src/logger/logger.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 describe('UserService', () => {
   let userService: UserService;
-  let userRepository: UserRepository;
+  // let userRepository: UserRepository;
 
   const mockUserRepository = {
+    retrieveUserByUsername: jest.fn(),
     retrieveAllUser: jest.fn(),
     insertUser: jest.fn(),
     saveUser: jest.fn(),
@@ -20,17 +22,41 @@ describe('UserService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
+        LoggerService,
         UserService,
         { provide: UserRepository, useValue: mockUserRepository },
       ],
     }).compile();
 
     userService = module.get<UserService>(UserService);
-    userRepository = module.get<UserRepository>(UserRepository);
+    // userRepository = module.get<UserRepository>(UserRepository);
   });
 
   afterEach(() => {
     jest.clearAllMocks();
+  });
+
+  describe('getUserByUsername', () => {
+    it('should return an user', async () => {
+      const userName: string = 'johndoe';
+      const user: UserModel = {
+        id: 1,
+        identityCard: '123456',
+        firstName: 'John',
+        lastName: 'Doe',
+        userName: 'johndoe',
+        password: 'password',
+      };
+
+      mockUserRepository.retrieveUserByUsername.mockResolvedValue(user);
+
+      expect(await userService.getUserByUsername(userName)).toEqual(user);
+      expect(mockUserRepository.retrieveUserByUsername).toHaveBeenCalledWith(userName);
+    });
+
+    it('should return an empty user', async () => {
+      const userName: string = 'johndoe';
+    });
   });
 
   describe('listAllUsers', () => {
@@ -81,9 +107,7 @@ describe('UserService', () => {
         }),
       );
 
-      await expect(userService.addUser(userDto)).rejects.toThrow(
-        ConflictException,
-      );
+      await expect(userService.addUser(userDto)).rejects.toThrow(ConflictException);
     });
   });
 
@@ -118,9 +142,7 @@ describe('UserService', () => {
         }),
       );
 
-      await expect(userService.modifyUser(dni, newUser)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(userService.modifyUser(dni, newUser)).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -142,9 +164,7 @@ describe('UserService', () => {
         }),
       );
 
-      await expect(userService.deleteUser(dni)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(userService.deleteUser(dni)).rejects.toThrow(NotFoundException);
     });
   });
 });
