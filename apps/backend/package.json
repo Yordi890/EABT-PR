@@ -70,8 +70,5 @@
     "typedoc": "^0.28.10",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.39.1"
-  },
-  "prisma": {
-    "schema": "./prisma/schema.prisma"
   }
 }
