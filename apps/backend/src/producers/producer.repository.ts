@@ -1,22 +1,22 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
 import { ProducerModel } from '../../generated/prisma/models/Producer';
 import { ProducerDto } from './dto/producer.dto';
+import { PrismaClient } from '../../generated/prisma/client';
 
 @Injectable()
 export class ProducerRepository {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prisma: PrismaClient) {}
 
   async retrieveAllProducers(): Promise<ProducerModel[]> {
-    return this.prismaService.producer.findMany();
+    return this.prisma.producer.findMany();
   }
 
   async insertProducer(producer: ProducerDto): Promise<void> {
-    await this.prismaService.producer.create({ data: producer });
+    await this.prisma.producer.create({ data: producer });
   }
 
   async saveProducer(dni: string, newProducer: ProducerDto): Promise<void> {
-    await this.prismaService.producer.update({
+    await this.prisma.producer.update({
       data: newProducer,
       where: {
         dni: dni,
@@ -25,7 +25,7 @@ export class ProducerRepository {
   }
 
   async removeProducer(dni: string): Promise<void> {
-    await this.prismaService.producer.delete({
+    await this.prisma.producer.delete({
       where: {
         dni: dni,
       },

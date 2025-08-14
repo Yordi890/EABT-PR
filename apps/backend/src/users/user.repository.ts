@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
 import { UserModel } from '../../generated/prisma/models/User';
 import { UserDto } from './dto/user.dto';
+import { PrismaClient } from '../../generated/prisma/client';
 
 @Injectable()
 export class UserRepository {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prisma: PrismaClient) {}
 
   async retrieveUserByUsername(userName: string): Promise<UserModel | null> {
-    return this.prismaService.user.findFirst({
+    return this.prisma.user.findFirst({
       where: {
         userName,
       },
@@ -16,15 +16,15 @@ export class UserRepository {
   }
 
   async retrieveAllUser(): Promise<UserModel[]> {
-    return this.prismaService.user.findMany();
+    return this.prisma.user.findMany();
   }
 
   async insertUser(user: UserDto): Promise<UserModel> {
-    return this.prismaService.user.create({ data: user });
+    return this.prisma.user.create({ data: user });
   }
 
   async saveUser(dni: string, newUser: UserDto): Promise<void> {
-    await this.prismaService.user.update({
+    await this.prisma.user.update({
       data: newUser,
       where: {
         identityCard: dni,
@@ -33,7 +33,7 @@ export class UserRepository {
   }
 
   async removeUser(dni: string): Promise<void> {
-    await this.prismaService.user.delete({
+    await this.prisma.user.delete({
       where: {
         identityCard: dni,
       },

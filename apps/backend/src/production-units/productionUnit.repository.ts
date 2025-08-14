@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
 import { ProductionUnitModel } from '../../generated/prisma/models/ProductionUnit';
 import { ProductionUnitDto } from './dto/productionUnit.dto';
+import { PrismaClient } from '../../generated/prisma/client';
 
 @Injectable()
 export class ProductionUnitRepository {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prisma: PrismaClient) {}
 
   async retrieveAllProductionUnit(): Promise<ProductionUnitModel[]> {
-    return this.prismaService.productionUnit.findMany();
+    return this.prisma.productionUnit.findMany();
   }
 
   async insertProductionUnit(
     productionUnit: ProductionUnitDto,
   ): Promise<ProductionUnitModel> {
-    return this.prismaService.productionUnit.create({
+    return this.prisma.productionUnit.create({
       data: productionUnit,
     });
   }
@@ -23,7 +23,7 @@ export class ProductionUnitRepository {
     name: string,
     newProductionUnit: ProductionUnitDto,
   ): Promise<void> {
-    await this.prismaService.productionUnit.update({
+    await this.prisma.productionUnit.update({
       data: newProductionUnit,
       where: {
         name: name,
@@ -32,7 +32,7 @@ export class ProductionUnitRepository {
   }
 
   async removeProductionUnit(name: string): Promise<void> {
-    await this.prismaService.productionUnit.delete({
+    await this.prisma.productionUnit.delete({
       where: {
         name: name,
       },

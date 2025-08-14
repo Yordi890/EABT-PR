@@ -1,24 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
 import { SupplyModel } from '../../generated/prisma/models/Supply';
 import { SupplyDto } from './dto/supply.dto';
+import { PrismaClient } from '../../generated/prisma/client';
 
 @Injectable()
 export class SupplyRepository {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prisma: PrismaClient) {}
 
   async retrieveAllSupply(): Promise<SupplyModel[]> {
-    return this.prismaService.supply.findMany();
+    return this.prisma.supply.findMany();
   }
 
   async insertSupply(supply: SupplyDto): Promise<SupplyModel> {
-    return this.prismaService.supply.create({
+    return this.prisma.supply.create({
       data: supply,
     });
   }
 
   async saveSupply(name: string, newSupply: SupplyDto): Promise<void> {
-    await this.prismaService.supply.update({
+    await this.prisma.supply.update({
       data: newSupply,
       where: {
         name: name,
@@ -27,7 +27,7 @@ export class SupplyRepository {
   }
 
   async removeSupply(name: string): Promise<void> {
-    await this.prismaService.supply.delete({
+    await this.prisma.supply.delete({
       where: {
         name: name,
       },
