@@ -5,15 +5,14 @@ import { ConfigService } from '@nestjs/config';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule, {
-    logger: new ConsoleLogger({
-      compact: true,
-      timestamp: true,
-    }),
+    logger: new ConsoleLogger(),
   });
 
   const configService: ConfigService = app.get(ConfigService);
 
   const PORT: number | undefined = configService.get('PORT');
+
+  // console.log("Este es el hash de turbo " + configService.get('TURBO_HASH'));
 
   app.useGlobalPipes(
     new ValidationPipe({
