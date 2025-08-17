@@ -1,11 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SupplyRepository } from '../../src/supplies/supply.repository';
-import { PrismaService } from '../../src/prisma/prisma.service';
 import { SupplyDto } from '../../src/supplies/dto/supply.dto';
+import {LoggerService} from "../../src/logger/logger.service";
+import { PrismaClient} from '../../generated/prisma/client'
 
 describe('SupplyRepository', () => {
   let supplyRepository: SupplyRepository;
-  let prismaService: PrismaService;
+  // let prismaService: PrismaService;
 
   const mockPrismaService = {
     supply: {
@@ -17,15 +18,16 @@ describe('SupplyRepository', () => {
   };
 
   beforeEach(async () => {
-    const module = await Test.createTestingModule({
+    const module : TestingModule= await Test.createTestingModule({
       providers: [
         SupplyRepository,
-        { provide: PrismaService, useValue: mockPrismaService },
+        { provide: PrismaClient, useValue: mockPrismaService },
+          LoggerService
       ],
     }).compile();
 
     supplyRepository = module.get<SupplyRepository>(SupplyRepository);
-    prismaService = module.get<PrismaService>(PrismaService);
+    // prismaService = module.get<PrismaService>(PrismaService);
   });
 
   afterEach(() => {

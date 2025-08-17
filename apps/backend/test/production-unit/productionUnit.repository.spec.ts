@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProductionUnitRepository } from '../../src/production-units/productionUnit.repository';
-import { PrismaService } from '../../src/prisma/prisma.service';
 import { ProductionUnitDto } from '../../src/production-units/dto/productionUnit.dto';
+import { PrismaClient } from '../../generated/prisma/client'
 
 describe('ProductionUnitRepository Tests', () => {
   let productionUnitRepository: ProductionUnitRepository;
-  let prismaService: PrismaService;
+  // let prismaService: PrismaService;
 
   const mockPrismaService = {
     productionUnit: {
@@ -17,17 +17,12 @@ describe('ProductionUnitRepository Tests', () => {
   };
 
   beforeEach(async () => {
-    const module = await Test.createTestingModule({
-      providers: [
-        ProductionUnitRepository,
-        { provide: PrismaService, useValue: mockPrismaService },
-      ],
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [ProductionUnitRepository, { provide: PrismaClient, useValue: mockPrismaService }],
     }).compile();
 
-    productionUnitRepository = module.get<ProductionUnitRepository>(
-      ProductionUnitRepository,
-    );
-    prismaService = module.get<PrismaService>(PrismaService);
+    productionUnitRepository = module.get<ProductionUnitRepository>(ProductionUnitRepository);
+    // prismaService = module.get<PrismaService>(PrismaService);
   });
 
   afterEach(() => {

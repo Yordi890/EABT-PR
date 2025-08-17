@@ -4,13 +4,15 @@ import { UserController } from '../../src/users/user.controller';
 import { UserService } from '../../src/users/user.service';
 import { UserRepository } from '../../src/users/user.repository';
 import { PrismaModule } from '../../src/prisma/prisma.module';
+import {LoggerService} from "../../src/logger/logger.service";
+import {LoggerModule} from "../../src/logger/logger.module";
 
 describe('UserModule', () => {
   let module: TestingModule;
 
   beforeEach(async () => {
     module = await Test.createTestingModule({
-      imports: [UserModule, PrismaModule],
+      imports: [UserModule, PrismaModule , LoggerModule],
     }).compile();
   });
 
@@ -19,8 +21,7 @@ describe('UserModule', () => {
   });
 
   it('should contain the UserControler', () => {
-    const userController = module.get<UserController>(UserController);
-    expect(userController).toBeDefined();
+    expect(module.get<UserController>(UserController)).toBeDefined();
   });
 
   it('should contain the UserService', () => {
@@ -30,4 +31,8 @@ describe('UserModule', () => {
   it('should contain the UserRepository', () => {
     expect(module.get<UserRepository>(UserRepository)).toBeDefined();
   });
+
+  it('should contain the LoggerService', () => {
+    expect(module.get<LoggerService>(LoggerService)).toBeDefined();
+  })
 });

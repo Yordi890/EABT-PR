@@ -1,11 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserRepository } from '../../src/users/user.repository';
-import { PrismaService } from '../../src/prisma/prisma.service';
 import { UserDto } from '../../src/users/dto/user.dto';
+import { LoggerService } from '../../src/logger/logger.service';
+import { PrismaClient } from '../../generated/prisma/client';
 
 describe('UserRepository', () => {
   let userRepository: UserRepository;
-  let prismaService: PrismaService;
+  // let prisma: PrismaClient;
 
   const mockPrismaService = {
     user: {
@@ -20,12 +21,13 @@ describe('UserRepository', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UserRepository,
-        { provide: PrismaService, useValue: mockPrismaService },
+        { provide: PrismaClient, useValue: mockPrismaService },
+        LoggerService,
       ],
     }).compile();
 
     userRepository = module.get<UserRepository>(UserRepository);
-    prismaService = module.get<PrismaService>(PrismaService);
+    // prisma = module.get<PrismaClient>(PrismaClient);
   });
 
   afterEach(() => {
