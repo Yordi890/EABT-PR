@@ -8,3 +8,4 @@ apps/backend/generated
 apps/backend/dist
 .turbo
 .env
+.eslintcache
