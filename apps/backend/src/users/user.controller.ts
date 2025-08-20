@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
-  Body,
-  Param,
-  HttpCode,
-} from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, HttpCode } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserModel } from '../../generated/prisma/models/User';
 import { UserDto } from './dto/user.dto';
@@ -29,10 +20,7 @@ export class UserController {
 
   @Put(':dni')
   @HttpCode(204)
-  async updateUser(
-    @Param('dni') dni: string,
-    @Body() newUser: UserDto,
-  ): Promise<void> {
+  async updateUser(@Param('dni') dni: string, @Body() newUser: UserDto): Promise<void> {
     await this.userService.modifyUser(dni, newUser);
   }
 
