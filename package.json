@@ -25,7 +25,7 @@
     "start": "turbo run start",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
-    "lint:fix" : "turbo run fix:lint"
+    "lint:fix": "turbo run fix:lint"
   },
   "devDependencies": {
     "turbo": "^2.5.5"
