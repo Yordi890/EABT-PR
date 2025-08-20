@@ -18,7 +18,7 @@
   "author": "Yordanis Tejeda Rodriguez",
   "type": "module",
   "workspaces": [
-    "apps/*"
+    "apps/*", "packages/*"
   ],
   "scripts": {
     "build": "turbo run build",
