@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ProductionUnitRepository } from './productionUnit.repository';
-import { ProductionUnitModel } from '../../generated/prisma/models/ProductionUnit';
+import { ProductionUnit as ProductionUnitModel } from '@repo/db';
 import { ProductionUnitDto } from './dto/productionUnit.dto';
 import prismaHandler from '../utils/prisma-handler';
 import { LoggerService } from '../logger/logger.service';
@@ -48,22 +48,13 @@ export class ProductionUnitService {
    * @returns Una promesa que resuelve cuando la unidad de producción ha sido añadida.
    */
   async addProductionUnit(productionUnit: ProductionUnitDto): Promise<void> {
-    this.logger.log(
-      `Intentando crear unidad de producción con nombre: ${productionUnit.name}`,
-    );
+    this.logger.log(`Intentando crear unidad de producción con nombre: ${productionUnit.name}`);
     try {
       const productionUnitCreated: ProductionUnitModel =
-        await this.productionUnitRepository.insertProductionUnit(
-          productionUnit,
-        );
-      this.logger.log(
-        'Unidad de producción creada exitosamente',
-        productionUnitCreated,
-      );
+        await this.productionUnitRepository.insertProductionUnit(productionUnit);
+      this.logger.log('Unidad de producción creada exitosamente', productionUnitCreated);
     } catch (error) {
-      this.logger.error(
-        `Error al crear unidad de producción con nombre: ${productionUnit.name}`,
-      );
+      this.logger.error(`Error al crear unidad de producción con nombre: ${productionUnit.name}`);
       prismaHandler(error);
     }
   }
@@ -74,25 +65,13 @@ export class ProductionUnitService {
    * @param newProductionUnit - Nuevos datos de la unidad de producción.
    * @returns Una promesa que resuelve cuando la unidad de producción ha sido modificada.
    */
-  async modifyProductionUnit(
-    name: string,
-    newProductionUnit: ProductionUnitDto,
-  ): Promise<void> {
-    this.logger.log(
-      `Intentando modificar unidad de producción con nombre: ${name}`,
-    );
+  async modifyProductionUnit(name: string, newProductionUnit: ProductionUnitDto): Promise<void> {
+    this.logger.log(`Intentando modificar unidad de producción con nombre: ${name}`);
     try {
-      await this.productionUnitRepository.saveProductionUnit(
-        name,
-        newProductionUnit,
-      );
-      this.logger.log(
-        `Unidad de producción modificada exitosamente con nombre: ${name}`,
-      );
+      await this.productionUnitRepository.saveProductionUnit(name, newProductionUnit);
+      this.logger.log(`Unidad de producción modificada exitosamente con nombre: ${name}`);
     } catch (error) {
-      this.logger.error(
-        `Error al modificar unidad de producción con nombre: ${name}`,
-      );
+      this.logger.error(`Error al modificar unidad de producción con nombre: ${name}`);
       prismaHandler(error);
     }
   }
@@ -103,18 +82,12 @@ export class ProductionUnitService {
    * @returns Una promesa que resuelve cuando la unidad de producción ha sido eliminada.
    */
   async deleteProductionUnit(name: string): Promise<void> {
-    this.logger.log(
-      `Intentando eliminar unidad de producción con nombre: ${name}`,
-    );
+    this.logger.log(`Intentando eliminar unidad de producción con nombre: ${name}`);
     try {
       await this.productionUnitRepository.removeProductionUnit(name);
-      this.logger.log(
-        `Unidad de producción eliminada exitosamente con nombre: ${name}`,
-      );
+      this.logger.log(`Unidad de producción eliminada exitosamente con nombre: ${name}`);
     } catch (error) {
-      this.logger.error(
-        `Error al eliminar unidad de producción con nombre: ${name}`,
-      );
+      this.logger.error(`Error al eliminar unidad de producción con nombre: ${name}`);
       prismaHandler(error);
     }
   }

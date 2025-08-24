@@ -1,16 +1,7 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
-  Body,
-  Param,
-  HttpCode,
-} from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, HttpCode } from '@nestjs/common';
 import { ProductionUnitService } from './productionUnit.service';
 import { ProductionUnitDto } from './dto/productionUnit.dto';
-import { ProductionUnitModel } from '../../generated/prisma/models/ProductionUnit';
+import { ProductionUnit as ProductionUnitModel } from '@repo/db';
 
 @Controller('productionUnit')
 export class ProductionUnitController {
@@ -23,9 +14,7 @@ export class ProductionUnitController {
 
   @Post()
   @HttpCode(201)
-  async createProductionUnit(
-    @Body() productionUnit: ProductionUnitDto,
-  ): Promise<void> {
+  async createProductionUnit(@Body() productionUnit: ProductionUnitDto): Promise<void> {
     await this.productionUnitService.addProductionUnit(productionUnit);
   }
 
@@ -35,10 +24,7 @@ export class ProductionUnitController {
     @Param('name') name: string,
     @Body() newProductionUnit: ProductionUnitDto,
   ): Promise<void> {
-    await this.productionUnitService.modifyProductionUnit(
-      name,
-      newProductionUnit,
-    );
+    await this.productionUnitService.modifyProductionUnit(name, newProductionUnit);
   }
 
   @Delete(':name')

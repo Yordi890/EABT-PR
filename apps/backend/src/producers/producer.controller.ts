@@ -1,16 +1,7 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
-  Body,
-  Param,
-  HttpCode,
-} from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, HttpCode } from '@nestjs/common';
 
 import { ProducerService } from './producer.service';
-import { ProducerModel } from 'generated/prisma/models/Producer';
+import { Producer as ProducerModel } from '@repo/db';
 import { ProducerDto } from './dto/producer.dto';
 
 @Controller('producers')
@@ -30,10 +21,7 @@ export class ProducerController {
 
   @Put(':dni')
   @HttpCode(204)
-  async updateProducer(
-    @Param('dni') dni: string,
-    @Body() newProducer: ProducerDto,
-  ): Promise<void> {
+  async updateProducer(@Param('dni') dni: string, @Body() newProducer: ProducerDto): Promise<void> {
     await this.producerService.modifyProducer(dni, newProducer);
   }
 

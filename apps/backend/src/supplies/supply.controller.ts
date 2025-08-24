@@ -1,16 +1,7 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
-  Body,
-  Param,
-  HttpCode,
-} from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, HttpCode } from '@nestjs/common';
 import { SupplyService } from './supply.service';
 import { SupplyDto } from './dto/supply.dto';
-import { SupplyModel } from '../../generated/prisma/models/Supply';
+import { Supply as SupplyModel } from '@repo/db';
 
 @Controller('supply')
 export class SupplyController {
@@ -29,10 +20,7 @@ export class SupplyController {
 
   @Put(':name')
   @HttpCode(204)
-  async updateSupply(
-    @Param('name') name: string,
-    @Body() newSupply: SupplyDto,
-  ): Promise<void> {
+  async updateSupply(@Param('name') name: string, @Body() newSupply: SupplyDto): Promise<void> {
     await this.supplyService.modifySupply(name, newSupply);
   }
 

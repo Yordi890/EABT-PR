@@ -1,15 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
-  Body,
-  Param,
-  HttpCode,
-} from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, HttpCode } from '@nestjs/common';
 import { LandFileService } from './land-file.service';
-import { LandFileModel } from '../../generated/prisma/models/LandFile';
+import { LandFile as LandFileModel } from '@repo/db';
 import { LandFileDto } from './dto/land-file.dto';
 
 @Controller('landFile')

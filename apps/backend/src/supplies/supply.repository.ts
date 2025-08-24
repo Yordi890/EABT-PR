@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { SupplyModel } from '../../generated/prisma/models/Supply';
+import { Supply as SupplyModel } from '@repo/db';
 import { SupplyDto } from './dto/supply.dto';
-import { PrismaClient } from '../../generated/prisma/client';
+import { PrismaClient } from '@repo/db';
 
 @Injectable()
 export class SupplyRepository {

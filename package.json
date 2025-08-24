@@ -17,6 +17,7 @@
   "license": "ISC",
   "author": "Yordanis Tejeda Rodriguez",
   "type": "module",
+  "private": true,
   "workspaces": [
     "apps/*", "packages/*"
   ],

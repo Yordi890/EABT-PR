@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { LandFileModel } from '../../generated/prisma/models/LandFile';
+import { LandFile as LandFileModel } from '@repo/db';
 import { LandFileDto } from './dto/land-file.dto';
-import { PrismaClient } from '../../generated/prisma/client';
+import { PrismaClient } from '@repo/db';
 
 @Injectable()
 export class LandFileRepository {
@@ -15,10 +15,7 @@ export class LandFileRepository {
     await this.prisma.landFile.create({ data: landFile });
   }
 
-  async saveLandFile(
-    fileNumber: string,
-    newlandFile: LandFileDto,
-  ): Promise<void> {
+  async saveLandFile(fileNumber: string, newlandFile: LandFileDto): Promise<void> {
     await this.prisma.landFile.update({
       data: newlandFile,
       where: {

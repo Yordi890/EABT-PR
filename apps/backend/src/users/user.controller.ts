@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, HttpCode } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserModel } from '../../generated/prisma/models/User';
+import { User as UserModel } from '@repo/db';
 import { UserDto } from './dto/user.dto';
 
 @Controller('user')

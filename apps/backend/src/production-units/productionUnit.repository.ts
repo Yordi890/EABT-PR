@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { ProductionUnitModel } from '../../generated/prisma/models/ProductionUnit';
+import { ProductionUnit as ProductionUnitModel } from '@repo/db';
 import { ProductionUnitDto } from './dto/productionUnit.dto';
-import { PrismaClient } from '../../generated/prisma/client';
+import { PrismaClient } from '@repo/db';
 
 @Injectable()
 export class ProductionUnitRepository {
@@ -11,18 +11,13 @@ export class ProductionUnitRepository {
     return this.prisma.productionUnit.findMany();
   }
 
-  async insertProductionUnit(
-    productionUnit: ProductionUnitDto,
-  ): Promise<ProductionUnitModel> {
+  async insertProductionUnit(productionUnit: ProductionUnitDto): Promise<ProductionUnitModel> {
     return this.prisma.productionUnit.create({
       data: productionUnit,
     });
   }
 
-  async saveProductionUnit(
-    name: string,
-    newProductionUnit: ProductionUnitDto,
-  ): Promise<void> {
+  async saveProductionUnit(name: string, newProductionUnit: ProductionUnitDto): Promise<void> {
     await this.prisma.productionUnit.update({
       data: newProductionUnit,
       where: {

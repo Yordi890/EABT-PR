@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { PrismaModule } from '../prisma/prisma.module';
+// import { PrismaModule } from '../prisma/prisma.module';
 import { LoggerModule } from '../logger/logger.module';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from '../users/user.module';
@@ -14,7 +14,7 @@ import { AuthModule } from '../auth/auth.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    PrismaModule,
+    // PrismaModule,
     AuthModule,
     LoggerModule,
     UserModule,

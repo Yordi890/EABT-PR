@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ProducerRepository } from './producer.repository';
-import { ProducerModel } from '../../generated/prisma/models/Producer';
+import { Producer as ProducerModel } from '@repo/db';
 import prismaHandler from '../utils/prisma-handler';
 import { ProducerDto } from './dto/producer.dto';
 

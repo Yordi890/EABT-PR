@@ -1,15 +1,28 @@
 {
   "$schema": "./node_modules/turbo/schema.json",
   "tasks": {
+    "db:generate": {
+      "cache": false
+    },
+    "db:migrate": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:deploy": {
+      "cache": false
+    },
     "build": {
       "dependsOn": [
-        "^build"
+        "^build" , "^db:generate"
       ],
       "outputs": [
         "dist/**"
       ]
     },
     "dev": {
+      "dependsOn": [
+        "^db:generate"
+      ],
       "persistent": true,
       "cache": false
     },
