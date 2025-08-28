@@ -9,3 +9,4 @@ apps/backend/dist
 .turbo
 .env
 .eslintcache
+openapi.yaml
