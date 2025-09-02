@@ -19,6 +19,11 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "esModuleInterop": true,
-    "alwaysStrict": true
+    "alwaysStrict": true,
+    "references": [
+      {
+        "path": "../../packages/database"
+      }
+    ]
   }
 }
