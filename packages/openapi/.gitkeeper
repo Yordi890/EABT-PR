@@ -1,0 +1,3 @@
+# Este archivo es solo para que Git rastree la carpeta correctamente ya que como el archivo de
+# OpenAPI se regenera cada vez que se inicie la aplicación lo he excluido del rastreo por eso
+# este archivo es necesario.

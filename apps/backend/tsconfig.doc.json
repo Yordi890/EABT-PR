@@ -1,0 +1,4 @@
+{
+  "include": ["src/**/*.ts", "test"],
+  "exclude": ["dist", ".turbo", "generated","test", "src/app/file-to-exclude.ts"]
+}

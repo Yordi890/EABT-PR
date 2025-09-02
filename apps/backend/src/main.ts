@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
-import { ConsoleLogger, RequestMethod, ValidationPipe } from '@nestjs/common';
+import { ConsoleLogger, RequestMethod, ValidationPipe, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule, OpenAPIObject } from '@nestjs/swagger';
 import * as fs from 'fs';
@@ -12,13 +12,26 @@ async function bootstrap(): Promise<void> {
     logger: new ConsoleLogger(),
   });
 
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: '1',
+  });
   const configService: ConfigService = app.get(ConfigService);
 
   const PORT: number | undefined = configService.get('PORT');
 
-  // console.log("Este es el hash de turbo " + configService.get('TURBO_HASH'));
+  app.setGlobalPrefix('api', {
+    exclude: [
+      { path: 'health', method: RequestMethod.GET },
+      { path: '/', method: RequestMethod.GET },
+    ],
+  });
 
   const config = new DocumentBuilder()
+    .addGlobalResponse({
+      status: 500,
+      description: 'Internal server error',
+    })
     .setTitle('NestJS Swagger')
     .setDescription('API description')
     .setVersion('1.0')
@@ -26,8 +39,6 @@ async function bootstrap(): Promise<void> {
   const document: OpenAPIObject = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, document);
 
-  // const yamlPath = path.resolve(__dirname, '../../../../packages/openapi/openapi.yaml');
-  //fs.mkdirSync(path.dirname(yamlPath), { recursive: true });
   fs.writeFileSync(
     path.resolve(__dirname, '../../../../packages/openapi/openapi.yaml'),
     yaml.stringify(document),
@@ -42,12 +53,6 @@ async function bootstrap(): Promise<void> {
     }),
   );
 
-  app.setGlobalPrefix('api', {
-    exclude: [
-      { path: 'health', method: RequestMethod.GET },
-      { path: '/', method: RequestMethod.GET },
-    ],
-  });
   await app.listen(PORT ?? 3000);
 }
 

@@ -1,5 +1,7 @@
 import { IsNotEmpty, IsString } from 'class-validator';
+import { ApiSchema } from '@nestjs/swagger';
 
+@ApiSchema({ description: 'Usado para la creación de un usuario' })
 export class UserDto {
   @IsString()
   @IsNotEmpty()
