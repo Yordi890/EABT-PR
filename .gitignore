@@ -2,8 +2,11 @@
 .DS_Store
 
 .idea
-*/node_modules
+**/node_modules
 coverage/
-/backend/generated
-/backend/dist
-backend/.env
+apps/backend/generated
+apps/backend/dist
+.turbo
+.env
+.eslintcache
+openapi.yaml

@@ -1,0 +1,6 @@
+{
+  "type": "commonjs",
+  "devDependencies": {
+    "eslint-config-turbo": "^2.5.6"
+  }
+}

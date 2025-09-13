@@ -1,0 +1,5 @@
+{
+  "exclude": ["**/node_modules/**", "**/generated/**", "**/test/**", "**/dist/**, **/coverage/**"],
+  "entryPoints": ["src/**"],
+  "out": "generated/docs"
+}
