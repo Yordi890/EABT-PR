@@ -1,0 +1,34 @@
+{
+  "name": "eabt-pr",
+  "version": "1.0.0",
+  "description": "Proyecto en opcion al titulo en Ingenieria en Informatica",
+  "keywords": [
+    "tabaco",
+    "gestion"
+  ],
+  "homepage": "https://github.com/Yordi890/EABT-PR#readme",
+  "bugs": {
+    "url": "https://github.com/Yordi890/EABT-PR/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yordi890/EABT-PR.git"
+  },
+  "license": "ISC",
+  "author": "Yordanis Tejeda Rodriguez",
+  "type": "module",
+  "workspaces": [
+    "apps/*", "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "start": "turbo run start",
+    "dev": "turbo run dev --parallel",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run fix:lint"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.5"
+  },
+  "packageManager": "npm@11.5.1"
+}
