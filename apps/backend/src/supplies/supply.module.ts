@@ -1,10 +1,16 @@
 import { Module } from '@nestjs/common';
-import { SupplyService } from './supply.service';
-import { SupplyController } from './supply.controller';
-import { SupplyRepository } from './supply.repository';
+import { GenericModule } from '../generic-crud/generic.module.js';
+import { SupplyDto } from './dto/supply.dto.js';
 
 @Module({
-  controllers: [SupplyController],
-  providers: [SupplyService, SupplyRepository],
+  imports: [
+    GenericModule.forRoot({
+      name: 'supply',
+      routePrefix: 'supplies',
+      idFieldName: 'name',
+      modelName: 'supply',
+      dto: SupplyDto,
+    }),
+  ],
 })
 export class SupplyModule {}

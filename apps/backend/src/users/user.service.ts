@@ -1,97 +1,36 @@
-import { Injectable } from '@nestjs/common';
-import { UserRepository } from './user.repository';
-import { UserModel } from '../../generated/prisma/models/User';
-import { UserDto } from './dto/user.dto';
-import prismaHandler from '../utils/prisma-handler';
-import { LoggerService } from '../logger/logger.service';
+import { Injectable, Inject } from '@nestjs/common';
+import { GenericService } from '../generic-crud/generic.service.js';
+import { UserModel } from '../../generated/prisma/models/User.js';
+import { UserDto } from './dto/user.dto.js';
+import { LoggerService } from '../logger/logger.service.js';
 import * as bcrypt from 'bcrypt';
+import { IGenericRepository } from '../generic-crud/interfaces/generic.repository.interface.js';
+import handlePrismaError from '../utils/prisma-handler.js';
 
-/**
- * Servicio para gestionar operaciones relacionadas con los usuarios.
- * Proporciona métodos para listar, agregar, modificar y eliminar usuarios.
- */
 @Injectable()
-export class UserService {
-  /**
-   * Constructor de la clase UserService.
-   * @param userRepository - Repositorio de usuarios para acceder a la base de datos.
-   * @param logger - Servicio de logging para registrar eventos y errores.
-   */
+export class UserService extends GenericService<UserModel, UserDto, string> {
   constructor(
-    private readonly userRepository: UserRepository,
-    private readonly logger: LoggerService,
-  ) {}
-
-  async getUserByUsername(userName: string): Promise<UserModel | null> {
-    return this.userRepository.retrieveUserByUsername(userName);
+    @Inject('USER_REPOSITORY') repository: IGenericRepository<UserModel, UserDto, string>,
+    logger: LoggerService,
+  ) {
+    super(repository, logger);
   }
 
-  /**
-   * Lista todos los usuarios disponibles.
-   * @returns Una promesa que resuelve con una lista de usuarios.
-   */
-  async listAllUsers(): Promise<UserModel[]> {
-    this.logger.log('Intentando listar todos los usuarios');
+  // Sobrescribimos el método create para encriptar la contraseña
+  async create(item: UserDto): Promise<UserModel> {
+    item.password = await bcrypt.hash(item.password, 10);
+
     try {
-      const users: UserModel[] = await this.userRepository.retrieveAllUser();
-      this.logger.log('Usuarios listados exitosamente');
-      return users;
-    } catch (error) {
-      this.logger.error('Error al listar usuarios');
-      prismaHandler(error);
-      return [];
+      const createdItem = await this.repository.create(item);
+      this.logger.log('Elemento creado en usuarios', item);
+      return createdItem;
+    } catch (err) {
+      handlePrismaError(err);
     }
   }
 
-  /**
-   * Añade un nuevo usuario.
-   * @param user - Datos del usuario a añadir.
-   * @returns Una promesa que resuelve cuando el usuario ha sido añadido.
-   */
-  async addUser(user: UserDto): Promise<void> {
-    this.logger.log(`Intentando crear usuario con DNI: ${user.identityCard}`);
-
-    user.password = await bcrypt.hash(user.password, 10);
-
-    try {
-      const userCreated: UserModel = await this.userRepository.insertUser(user);
-      this.logger.log('Usuario creado', userCreated);
-    } catch (error) {
-      this.logger.error(`Error al crear usuario con DNI: ${user.identityCard}`);
-      prismaHandler(error);
-    }
-  }
-
-  /**
-   * Modifica un usuario existente.
-   * @param dni - DNI del usuario a modificar.
-   * @param newUser - Nuevos datos del usuario.
-   * @returns Una promesa que resuelve cuando el usuario ha sido modificado.
-   */
-  async modifyUser(dni: string, newUser: UserDto): Promise<void> {
-    this.logger.log(`Intentando modificar usuario con DNI: ${dni}`);
-    try {
-      await this.userRepository.saveUser(dni, newUser);
-      this.logger.log(`Usuario modificado exitosamente con DNI: ${dni}`);
-    } catch (error) {
-      this.logger.error(`Error al modificar usuario con DNI: ${dni}`);
-      prismaHandler(error);
-    }
-  }
-
-  /**
-   * Elimina un usuario.
-   * @param dni - DNI del usuario a eliminar.
-   * @returns Una promesa que resuelve cuando el usuario ha sido eliminado.
-   */
-  async deleteUser(dni: string): Promise<void> {
-    this.logger.log(`Intentando eliminar usuario con DNI: ${dni}`);
-    try {
-      await this.userRepository.removeUser(dni);
-      this.logger.log(`Usuario eliminado exitosamente con DNI: ${dni}`);
-    } catch (error) {
-      this.logger.error(`Error al eliminar usuario con DNI: ${dni}`);
-      prismaHandler(error);
-    }
+  // Puedes añadir métodos específicos para usuarios si es necesario
+  async getUserByUsername(username: string): Promise<UserModel | null> {
+    return this.repository.findByField('userName', username);
   }
 }

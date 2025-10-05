@@ -1,11 +1,20 @@
 import { Module } from '@nestjs/common';
-import { UserController } from './user.controller';
-import { UserService } from './user.service';
-import { UserRepository } from './user.repository';
+import { GenericModule } from '../generic-crud/generic.module.js';
+import { UserService } from './user.service.js';
+import { UserDto } from './dto/user.dto.js';
 
 @Module({
-  controllers: [UserController],
-  providers: [UserService, UserRepository],
-  imports: [],
+  imports: [
+    GenericModule.forRoot({
+      name: 'user',
+      routePrefix: 'users',
+      modelName: 'user',
+      idFieldName: 'identityCard',
+      dto: UserDto,
+      customService: UserService,
+    }),
+  ],
+  providers: [],
+  exports: [GenericModule],
 })
 export class UserModule {}

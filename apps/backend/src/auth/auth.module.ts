@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
-import { UserService } from '../users/user.service';
-import { UserRepository } from '../users/user.repository';
+import { AuthController } from './auth.controller.js';
+import { AuthService } from './auth.service.js';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { UserModule } from '../users/user.module.js';
 
 // noinspection JSUnusedGlobalSymbols
 @Module({
   imports: [
+    UserModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -20,6 +20,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UserService, UserRepository],
+  providers: [AuthService],
 })
 export class AuthModule {}

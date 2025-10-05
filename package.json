@@ -18,7 +18,8 @@
   "author": "Yordanis Tejeda Rodriguez",
   "type": "module",
   "workspaces": [
-    "apps/*", "packages/*"
+    "packages/*",
+    "apps/*"
   ],
   "scripts": {
     "build": "turbo run build",
@@ -30,5 +31,5 @@
   "devDependencies": {
     "turbo": "^2.5.5"
   },
-  "packageManager": "npm@11.5.1"
+  "packageManager": "pnpm@10.17.1"
 }

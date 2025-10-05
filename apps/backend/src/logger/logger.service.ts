@@ -1,47 +1,50 @@
 import { Injectable } from '@nestjs/common';
-import { Logger, createLogger, format, transports } from 'winston';
+import { createLogger, format, transports, Logger as WinstonLogger } from 'winston';
 import { inspect } from 'util';
 
 @Injectable()
 export class LoggerService {
-  private logger: Logger;
+  private readonly winstonLogger: WinstonLogger;
 
   constructor() {
-    this.logger = createLogger({
+    this.winstonLogger = createLogger({
       level: 'info',
       format: format.combine(
         format.timestamp(),
-
         format.printf(({ level, message, timestamp }) => {
           return JSON.stringify({
-            timestamp: timestamp,
+            timestamp,
             level: level.toUpperCase(),
-            message: message,
+            message,
           });
         }),
       ),
-      transports: [
-        // new transports.File({ filename: 'combined.log' }),
-        new transports.Console(),
-      ],
+      transports: [new transports.Console()],
     });
   }
 
-  log(message: string = '', obj?: any) {
-    const objString = inspect(obj, {
-      showHidden: false,
-      depth: null,
-      // colors: true,
-    }).replace(/\n/g, '');
-
-    this.logger.info(obj === undefined ? message : `${message} ${objString}`);
+  private formatMessage(message: string, obj?: any): string {
+    if (!obj) return message;
+    const objString = inspect(obj, { depth: null, showHidden: false }).replace(/\n/g, '');
+    return `${message} ${objString}`;
   }
 
-  error(message: string) {
-    this.logger.error(message);
+  log(message: string, obj?: any, context?: string) {
+    const formattedMessage = this.formatMessage(message, obj);
+    this.winstonLogger.info(formattedMessage);
   }
 
-  warn(message: string) {
-    this.logger.warn(message);
+  error(message: string, trace?: string, context?: string) {
+    this.winstonLogger.error(this.formatMessage(message, trace));
+  }
+
+  warn(message: string, obj?: any, context?: string) {
+    const formattedMessage = this.formatMessage(message, obj);
+    this.winstonLogger.warn(formattedMessage);
+  }
+
+  debug(message: string, obj?: any, context?: string) {
+    const formattedMessage = this.formatMessage(message, obj);
+    this.winstonLogger.debug(formattedMessage);
   }
 }
