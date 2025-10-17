@@ -7,7 +7,9 @@ export default class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
-  async login(@Body() loginDto: LoginDto) {
-    return this.authService.login(loginDto);
+  async login(@Body() data: LoginDto) {
+    const user = await this.authService.validateUser(data);
+    if (!user) throw new UnauthorizedException('Invalid credentials');
+    return this.authService.login(user);
   }
 }
