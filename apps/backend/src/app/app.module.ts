@@ -11,6 +11,37 @@ import ShutdownService from './app.service.js';
 
 import { SupplyDto, LandFileDto, ProducerDto, ProductionUnitDto } from '../dtos/index.js';
 
+const generics: GenericModuleConfig[] = [
+  {
+    name: 'productionUnits',
+    routePrefix: 'productionUnits',
+    idFieldName: 'name',
+    modelName: 'productionUnit',
+    dto: ProductionUnitDto,
+  },
+  {
+    name: 'supply',
+    routePrefix: 'supplies',
+    idFieldName: 'name',
+    modelName: 'supply',
+    dto: SupplyDto,
+  },
+  {
+    name: 'landFile',
+    routePrefix: 'landFiles',
+    idFieldName: 'fieldNumber',
+    modelName: 'landFile',
+    dto: LandFileDto,
+  },
+  {
+    name: 'producers',
+    routePrefix: 'producers',
+    idFieldName: 'dni',
+    modelName: 'producer',
+    dto: ProducerDto,
+  },
+];
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -19,12 +50,8 @@ import { SupplyDto, LandFileDto, ProducerDto, ProductionUnitDto } from '../dtos/
     UserModule,
     AuthModule,
     LoggerModule,
-    ProductionUnitModule,
-    SupplyModule,
-    LandFileModule,
-    ProducerModule,
+    ...generics.map(GenericModule.forRoot),
   ],
-  controllers: [],
   providers: [ShutdownService],
 })
 export default class AppModule {}
