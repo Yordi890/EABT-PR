@@ -18,7 +18,7 @@ export default class UserService extends GenericService<UserModel, UserDto, stri
 
   // Sobrescribimos el método create para encriptar la contraseña
   async create(item: UserDto): Promise<UserModel> {
-    item.password = await bcrypt.hash(item.password, 10);
+    item.password = await bcryptHash(item.password, 10);
 
     try {
       const createdItem = await this.repository.create(item);
