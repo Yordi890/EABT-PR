@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AuthController } from './auth.controller.js';
-import { AuthService } from './auth.service.js';
+import AuthController from './auth.controller.js';
+import AuthService from './auth.service.js';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UserModule } from '../users/user.module.js';
+import UserModule from '../users/user.module.js';
 
 // noinspection JSUnusedGlobalSymbols
 @Module({
@@ -22,4 +22,4 @@ import { UserModule } from '../users/user.module.js';
   controllers: [AuthController],
   providers: [AuthService],
 })
-export class AuthModule {}
+export default class AuthModule {}

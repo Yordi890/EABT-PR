@@ -1,8 +1,8 @@
 import 'reflect-metadata';
 import { Inject, Controller, Get, Post, Body, Param, Put, Delete, Type } from '@nestjs/common';
-import { GenericService } from './generic.service.js';
+import GenericService from './generic.service.js';
 
-export function GenericController<TModel, TDto, TId>(
+export default function GenericController<TModel, TDto, TId>(
   routePrefix: string,
   serviceToken: string,
   createDto?: Type<any>,

@@ -3,7 +3,10 @@ import { PrismaClient } from '../../generated/prisma/client.js';
 import { PrismaPg } from '@prisma/adapter-pg';
 
 @Injectable()
-export class PrismaService extends PrismaClient implements OnModuleInit, OnApplicationShutdown {
+export default class PrismaService
+  extends PrismaClient
+  implements OnModuleInit, OnApplicationShutdown
+{
   constructor() {
     super({
       adapter: new PrismaPg({

@@ -1,11 +1,11 @@
 import { Global, Injectable, NotFoundException } from '@nestjs/common';
-import { LoggerService } from '../logger/logger.service.js';
-import { IGenericRepository } from './interfaces/generic.repository.interface.js';
+import LoggerService from '../logger/logger.service.js';
+import IGenericRepository from './interfaces/generic.repository.interface.js';
 import handlePrismaError from '../utils/prisma-handler.js';
 
 @Global()
 @Injectable()
-export class GenericService<TModel, TDto, TId = string> {
+export default class GenericService<TModel, TDto, TId = string> {
   constructor(
     protected readonly repository: IGenericRepository<TModel, TDto, TId>,
     protected readonly logger: LoggerService,

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service.js';
-import { IGenericRepository } from './interfaces/generic.repository.interface.js';
+import PrismaService from '../prisma/prisma.service.js';
+import IGenericRepository from './interfaces/generic.repository.interface.js';
 
 export interface GenericRepositoryConfig {
   modelName: string; // Nombre del modelo en Prisma (user, supply, etc.)
@@ -8,7 +8,7 @@ export interface GenericRepositoryConfig {
 }
 
 @Injectable()
-export class GenericRepository<TModel, TDto, TId = string>
+export default class GenericRepository<TModel, TDto, TId = string>
   implements IGenericRepository<TModel, TDto, TId>
 {
   constructor(

@@ -1,14 +1,14 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { GenericService } from '../generic-crud/generic.service.js';
+import GenericService from '../generic-crud/generic.service.js';
 import { UserModel } from '../../generated/prisma/models/User.js';
-import { UserDto } from './dto/user.dto.js';
-import { LoggerService } from '../logger/logger.service.js';
-import * as bcrypt from 'bcrypt';
-import { IGenericRepository } from '../generic-crud/interfaces/generic.repository.interface.js';
+import UserDto from './dto/user.dto.js';
+import LoggerService from '../logger/logger.service.js';
+import { hash as bcryptHash } from 'bcrypt';
+import IGenericRepository from '../generic-crud/interfaces/generic.repository.interface.js';
 import handlePrismaError from '../utils/prisma-handler.js';
 
 @Injectable()
-export class UserService extends GenericService<UserModel, UserDto, string> {
+export default class UserService extends GenericService<UserModel, UserDto, string> {
   constructor(
     @Inject('USER_REPOSITORY') repository: IGenericRepository<UserModel, UserDto, string>,
     logger: LoggerService,

@@ -1,9 +1,9 @@
 import { Module, Global } from '@nestjs/common';
-import { LoggerService } from './logger.service.js';
+import LoggerService from './logger.service.js';
 
 @Global()
 @Module({
   providers: [LoggerService],
   exports: [LoggerService],
 })
-export class LoggerModule {}
+export default class LoggerModule {}

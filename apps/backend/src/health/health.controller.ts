@@ -1,10 +1,10 @@
 import { Controller, Get } from '@nestjs/common';
 import { HealthCheck, HealthCheckService, PrismaHealthIndicator } from '@nestjs/terminus';
-import { PrismaService } from '../prisma/prisma.service.js';
+import PrismaService from '../prisma/prisma.service.js';
 import { VERSION_NEUTRAL } from '@nestjs/common/interfaces/version-options.interface.js';
 
 @Controller({ path: 'health', version: VERSION_NEUTRAL })
-export class HealthController {
+export default class HealthController {
   constructor(
     private health: HealthCheckService,
     private prismaHealth: PrismaHealthIndicator,

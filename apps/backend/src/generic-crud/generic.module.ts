@@ -1,11 +1,11 @@
 import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
-import { GenericRepository } from './generic.repository.js';
-import { GenericService } from './generic.service.js';
-import { LoggerService } from '../logger/logger.service.js';
-import { PrismaService } from '../prisma/prisma.service.js';
-import { GenericController } from './generic.controller.js';
+import GenericRepository from './generic.repository.js';
+import GenericService from './generic.service.js';
+import LoggerService from '../logger/logger.service.js';
+import PrismaService from '../prisma/prisma.service.js';
+import GenericController from './generic.controller.js';
 import { PartialType } from '@nestjs/mapped-types';
-import { IGenericRepository } from './interfaces/generic.repository.interface.js';
+import IGenericRepository from './interfaces/generic.repository.interface.js';
 
 export interface GenericModuleConfig {
   name: string;
@@ -19,7 +19,7 @@ export interface GenericModuleConfig {
 }
 
 @Module({})
-export class GenericModule {
+export default class GenericModule {
   static forRoot(config: GenericModuleConfig): DynamicModule {
     const serviceToken = `${config.name.toUpperCase()}_SERVICE`;
     const repositoryToken = `${config.name.toUpperCase()}_REPOSITORY`;

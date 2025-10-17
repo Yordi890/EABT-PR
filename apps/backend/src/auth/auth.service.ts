@@ -1,12 +1,12 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { LoginDto } from './dto/loginDto.js';
-import * as bcrypt from 'bcrypt';
+import LoginDto from './dto/loginDto.js';
+import { compare as bcryptCompare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { GenericService } from '../generic-crud/generic.service.js';
+import GenericService from '../generic-crud/generic.service.js';
 import { UserModel } from '../../generated/prisma/models/User.js';
 
 @Injectable()
-export class AuthService {
+export default class AuthService {
   constructor(
     @Inject('USER_SERVICE')
     private readonly userService: GenericService<UserModel, any, string>,

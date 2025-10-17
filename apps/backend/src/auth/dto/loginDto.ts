@@ -1,7 +1,7 @@
 import { Transform } from 'class-transformer';
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class LoginDto {
+export default class LoginDto {
   @Transform(({ value }: { value: string }) => value.trim())
   @IsNotEmpty()
   @IsString()

@@ -3,7 +3,7 @@ import { createLogger, format, transports, Logger as WinstonLogger } from 'winst
 import { inspect } from 'util';
 
 @Injectable()
-export class LoggerService {
+export default class LoggerService {
   private readonly winstonLogger: WinstonLogger;
 
   constructor() {

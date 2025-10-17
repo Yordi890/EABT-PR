@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { GenericModule } from '../generic-crud/generic.module.js';
-import { UserService } from './user.service.js';
-import { UserDto } from './dto/user.dto.js';
+import GenericModule from '../generic-crud/generic.module.js';
+import UserService from './user.service.js';
+import UserDto from './dto/user.dto.js';
 
 @Module({
   imports: [
@@ -17,4 +17,4 @@ import { UserDto } from './dto/user.dto.js';
   providers: [],
   exports: [GenericModule],
 })
-export class UserModule {}
+export default class UserModule {}

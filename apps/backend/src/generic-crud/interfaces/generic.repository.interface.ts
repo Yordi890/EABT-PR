@@ -1,5 +1,5 @@
 // generic-repository.interface.ts
-export interface IGenericRepository<TModel, TDto, TId = string> {
+export default interface IGenericRepository<TModel, TDto, TId = string> {
   findAll(): Promise<TModel[]>;
   findByField(field: string, value: any): Promise<TModel | null>;
   findById(id: TId): Promise<TModel | null>;
