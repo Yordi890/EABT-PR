@@ -40,7 +40,7 @@ export default function GenericController<TModel, TDto, TId>(
   }
 
   Object.defineProperty(GenericController, 'name', {
-    value: `${routePrefix.toUpperCase()}Controller`,
+    value: `${routePrefix.charAt(0).toUpperCase()}${routePrefix.slice(1)}`,
   });
 
   const proto = GenericController.prototype;
