@@ -9,6 +9,7 @@ async function bootstrap(): Promise<void> {
 
   const configService: ConfigService = app.get(ConfigService);
 
+  app.enableCors();
   app.enableShutdownHooks();
 
   app.enableVersioning({
