@@ -32,6 +32,10 @@ export default class GenericService<TModel, TDto, TId = string> {
     }
   }
 
+  async listPaginated(page: number): Promise<TModel[]> {
+    return await this.repository.findPaginated(page);
+  }
+
   async findByField(field: string, value: any): Promise<TModel | null> {
     try {
       return await this.repository.findByField(field, value);

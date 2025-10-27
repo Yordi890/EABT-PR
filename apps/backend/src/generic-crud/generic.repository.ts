@@ -20,6 +20,32 @@ export default class GenericRepository<TModel, TDto, TId = string>
     return this.prisma[this.config.modelName].findMany();
   }
 
+  async findPaginated(page: number) {
+    const pageSize = 10; // Tamaño de página fijo
+    const skip = (page - 1) * pageSize; // Calcula cuántos registros saltar
+
+    const [users, total] = await Promise.all([
+      this.prisma[this.config.modelName].findMany({
+        skip, // Saltar los primeros `skip` registros
+        take: pageSize, // Tomar solo 10 registros
+        orderBy: { id: 'asc' }, // Ordenar por ID (ascendente)
+      }),
+      this.prisma.user.count(), // Contar el total de registros
+    ]);
+
+    const totalPages = Math.ceil(total / pageSize); // Calcula el total de páginas
+
+    return {
+      data: users, // Registros de la página actual
+      meta: {
+        total, // Total de registros en la base de datos
+        page, // Página actual
+        pageSize, // Tamaño de página fijo (10)
+        totalPages, // Total de páginas disponibles
+      },
+    };
+  }
+
   async findByField(field: string, value: any): Promise<TModel | null> {
     return this.prisma[this.config.modelName].findUnique({
       where: {
