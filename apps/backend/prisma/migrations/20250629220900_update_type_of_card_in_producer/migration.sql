@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "Producer" ALTER COLUMN "cupCard" SET DATA TYPE TEXT,
-ALTER COLUMN "mlcCard" SET DATA TYPE TEXT;
