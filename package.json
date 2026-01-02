@@ -16,7 +16,7 @@
   },
   "license": "ISC",
   "author": "Yordanis Tejeda Rodriguez",
-  "type": "module",
+  "type": "commonjs",
   "workspaces": [
     "packages/*",
     "apps/*"
@@ -29,7 +29,10 @@
     "lint:fix": "turbo run fix:lint"
   },
   "devDependencies": {
-    "turbo": "^2.5.5"
+    "eslint": "^9.39.2",
+    "eslint-plugin-prettier": "^5.5.4",
+    "prettier": "^3.7.4",
+    "turbo": "^2.6.3"
   },
-  "packageManager": "npm@10.17.1"
+  "packageManager": "pnpm@10.26.0"
 }
