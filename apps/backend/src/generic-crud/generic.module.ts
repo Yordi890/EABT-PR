@@ -1,34 +1,46 @@
 import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
+import { PrismaClient } from '../../generated/prisma/client.js';
+
 import GenericRepository from './generic.repository.js';
 import GenericService from './generic.service.js';
 import LoggerService from '../logger/logger.service.js';
 import PrismaService from '../prisma/prisma.service.js';
 import GenericController from './generic.controller.js';
+
 import { PartialType } from '@nestjs/mapped-types';
 import IGenericRepository from './interfaces/generic.repository.interface.js';
 
-export interface GenericModuleConfig {
+// Tipo seguro: todas las propiedades delegadas disponibles en PrismaClient
+export type PrismaModelName = keyof PrismaClient;
+
+export interface GenericModuleConfig<T extends PrismaModelName = PrismaModelName> {
   name: string;
   routePrefix: string;
-  modelName: string;
+  modelName: T;
   idFieldName: string;
-  idType?: Type<any>; // opcional: Number, String, etc.
-  dto?: Type<any>; // la clase DTO (p. ej. UserDto)
-  updateDto?: Type<any>; // opcional: si quieres controlar el DTO de update
+
+  idType?: Type<any>;
+  dto?: any;
+  updateDto?: any;
   customService?: Type<any>;
 }
 
 @Module({})
 export default class GenericModule {
-  static forRoot(config: GenericModuleConfig): DynamicModule {
+  static forRoot<T extends PrismaModelName = PrismaModelName>(
+    config: GenericModuleConfig<T>,
+  ): DynamicModule {
     const serviceToken = `${config.name.toUpperCase()}_SERVICE`;
     const repositoryToken = `${config.name.toUpperCase()}_REPOSITORY`;
 
     const providers: Provider[] = [
       {
         provide: repositoryToken,
+        // El tipo en tiempo de compilación: IGenericRepository<any, any, any>
         useFactory: (prisma: PrismaService): IGenericRepository<any, any, any> =>
-          new GenericRepository(prisma, {
+          // Pasamos el parámetro de tipo T para que el repositorio tenga
+          // modelDelegate: PrismaClient[T] en su tipado.
+          new GenericRepository<any, any, any, any, T>(prisma, {
             modelName: config.modelName,
             idFieldName: config.idFieldName,
           }),
@@ -50,12 +62,11 @@ export default class GenericModule {
       });
     }
 
-    // Si no pasas updateDto, lo generamos a partir del dto usando PartialType
     const createDto = config.dto;
     const updateDto = config.updateDto ?? (createDto ? PartialType(createDto) : undefined);
+
     const idType = config.idType ?? String;
 
-    // Pasamos los DTOs y el idType a la fábrica del controlador dinámico
     const ControllerClass = GenericController(
       config.routePrefix,
       serviceToken,

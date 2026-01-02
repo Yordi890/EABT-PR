@@ -1,87 +1,108 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaClient } from '../../generated/prisma/client.js';
 import PrismaService from '../prisma/prisma.service.js';
 import IGenericRepository from './interfaces/generic.repository.interface.js';
 
-export interface GenericRepositoryConfig {
-  modelName: string; // Nombre del modelo en Prisma (user, supply, etc.)
-  idFieldName: string; // Campo identificador (identityCard, name, etc.)
+/**
+ * Configuración del repositorio genérico
+ */
+export interface GenericRepositoryConfig<T extends keyof PrismaClient> {
+  modelName: T;
+  idFieldName: string;
 }
 
+/**
+ * GenericRepository tipado:
+ * - TModel: tipo de entidad recuperada (ej: User)
+ * - TCreateInput: tipo para create
+ * - TUpdateInput: tipo para update
+ * - TWhereUnique: tipo para whereUnique
+ * - T: nombre del delegate en PrismaClient
+ */
 @Injectable()
-export default class GenericRepository<TModel, TDto, TId = string>
-  implements IGenericRepository<TModel, TDto, TId>
+export default class GenericRepository<
+  TModel,
+  TCreateInput,
+  TUpdateInput,
+  TWhereUnique,
+  T extends keyof PrismaClient,
+> implements IGenericRepository<TModel, TCreateInput, any>
 {
+  // Delegate tipado del modelo específico
+  protected modelDelegate: PrismaClient[T];
+
   constructor(
     protected readonly prisma: PrismaService,
-    protected readonly config: GenericRepositoryConfig,
-  ) {}
-
-  async findAll(): Promise<TModel[]> {
-    return this.prisma[this.config.modelName].findMany();
+    protected readonly config: GenericRepositoryConfig<T>,
+  ) {
+    // ✅ Convertimos PrismaService a PrismaClient para que TS acepte indexación con T
+    const base = this.prisma as unknown as PrismaClient;
+    this.modelDelegate = base[this.config.modelName];
   }
 
-  async findPaginated(page: number) {
-    const pageSize = 10; // Tamaño de página fijo
-    const skip = (page - 1) * pageSize; // Calcula cuántos registros saltar
+  async findAll(): Promise<TModel[]> {
+    return (this.modelDelegate as any).findMany();
+  }
 
-    const [users, total] = await Promise.all([
-      this.prisma[this.config.modelName].findMany({
-        skip, // Saltar los primeros `skip` registros
-        take: pageSize, // Tomar solo 10 registros
-        orderBy: { id: 'asc' }, // Ordenar por ID (ascendente)
+  async findPaginated(page: number, pageSize: number) {
+    const skip = (page - 1) * pageSize;
+
+    const [data, total] = await Promise.all([
+      (this.modelDelegate as any).findMany({
+        skip,
+        take: pageSize,
+        orderBy: { [this.config.idFieldName]: 'asc' },
       }),
-      this.prisma.user.count(), // Contar el total de registros
+      (this.modelDelegate as any).count(),
     ]);
 
-    const totalPages = Math.ceil(total / pageSize); // Calcula el total de páginas
+    const totalPages = Math.ceil(total / pageSize);
 
     return {
-      data: users, // Registros de la página actual
+      data,
       meta: {
-        total, // Total de registros en la base de datos
-        page, // Página actual
-        pageSize, // Tamaño de página fijo (10)
-        totalPages, // Total de páginas disponibles
+        total,
+        page,
+        pageSize,
+        totalPages,
       },
     };
   }
 
   async findByField(field: string, value: any): Promise<TModel | null> {
-    return this.prisma[this.config.modelName].findUnique({
-      where: {
-        [field]: value,
-      },
+    return (this.modelDelegate as any).findFirst({
+      where: { [field]: value },
     });
   }
 
-  async findById(id: TId): Promise<TModel | null> {
-    return this.prisma[this.config.modelName].findUnique({
-      where: {
-        [this.config.idFieldName]: id,
-      },
-    });
+  async findById(where: TWhereUnique): Promise<TModel | null> {
+    return (this.modelDelegate as any).findUnique({ where });
   }
 
-  async create(item: TDto): Promise<TModel> {
-    return this.prisma[this.config.modelName].create({ data: item });
+  async create(data: TCreateInput): Promise<TModel> {
+    return (this.modelDelegate as any).create({ data });
   }
 
-  async updateById(id: TId, item: Partial<TDto>): Promise<TModel> {
-    return this.prisma[this.config.modelName].update({
-      where: { [this.config.idFieldName]: id },
-      data: item,
-    });
+  async update(where: TWhereUnique, data: TUpdateInput): Promise<TModel> {
+    return (this.modelDelegate as any).update({ where, data });
   }
 
-  async deleteById(id: TId): Promise<void> {
-    await this.prisma[this.config.modelName].delete({
-      where: { [this.config.idFieldName]: id },
-    });
+  async updateById(id: any, item: Partial<any>): Promise<TModel> {
+    return this.update(
+      { [this.config.idFieldName]: id } as unknown as TWhereUnique,
+      item as unknown as TUpdateInput,
+    );
+  }
+
+  async delete(where: TWhereUnique): Promise<TModel> {
+    return (this.modelDelegate as any).delete({ where });
+  }
+
+  async deleteById(id: any): Promise<void> {
+    await this.delete({ [this.config.idFieldName]: id } as unknown as TWhereUnique);
   }
 
   async findByCriteria(criteria: any): Promise<TModel | null> {
-    return this.prisma[this.config.modelName].findFirst({
-      where: criteria,
-    });
+    return (this.modelDelegate as any).findFirst({ where: criteria });
   }
 }

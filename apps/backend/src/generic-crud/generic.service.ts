@@ -11,19 +11,14 @@ export default class GenericService<TModel, TDto, TId = string> {
     protected readonly logger: LoggerService,
   ) {}
 
-  /**
-   * Hook que se ejecuta antes de crear un elemento
-   */
   protected async beforeCreate(item: TDto): Promise<TDto> {
     return item;
   }
 
-  /**
-   * Hook que se ejecuta después de crear un elemento
-   */
   protected async afterCreate(item: TModel): Promise<void> {}
 
   async listAll(): Promise<TModel[]> {
+    console.log("hello");
     try {
       this.logger.log('Listando elementos');
       return await this.repository.findAll();
@@ -32,8 +27,8 @@ export default class GenericService<TModel, TDto, TId = string> {
     }
   }
 
-  async listPaginated(page: number): Promise<TModel[]> {
-    return await this.repository.findPaginated(page);
+  async listPaginated(page: number, pageSize: number): Promise<TModel[]> {
+    return await this.repository.findPaginated(page, pageSize);
   }
 
   async findByField(field: string, value: any): Promise<TModel | null> {
@@ -75,7 +70,8 @@ export default class GenericService<TModel, TDto, TId = string> {
   async update(id: TId, item: Partial<TDto>): Promise<TModel> {
     try {
       this.logger.log(`Actualizando elemento con ID: ${id}`);
-      return await this.repository.updateById(id, item);
+      // El repositorio ya soporta updateById para compatibilidad
+      return await this.repository.updateById(id as any, item as any);
     } catch (error) {
       handlePrismaError(error);
     }
@@ -84,7 +80,7 @@ export default class GenericService<TModel, TDto, TId = string> {
   async delete(id: TId): Promise<void> {
     try {
       this.logger.log(`Eliminando elemento con ID: ${id}`);
-      await this.repository.deleteById(id);
+      await this.repository.deleteById(id as any);
     } catch (error) {
       handlePrismaError(error);
     }

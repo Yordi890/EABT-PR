@@ -32,8 +32,11 @@ export default function GenericController<TModel, TDto, TId>(
     }
 
     @Get()
-    async getPaginated(@Query('page', ParseIntPipe) page: number) {
-      return this.service.listPaginated(page);
+    async getPaginated(
+      @Query('page', ParseIntPipe) page: number,
+      @Query('pageSize', ParseIntPipe) pageSize: number = 10,
+    ) {
+      return this.service.listPaginated(page, pageSize);
     }
 
     @Get(':id')
@@ -58,22 +61,20 @@ export default function GenericController<TModel, TDto, TId>(
   }
 
   Object.defineProperty(GenericController, 'name', {
-    value: `${routePrefix.charAt(0).toUpperCase()}${routePrefix.slice(1)}`,
+    value: `${routePrefix.charAt(0).toUpperCase()}${routePrefix.slice(1)}Controller`,
   });
 
   const proto = GenericController.prototype;
 
-  // Fijamos la metadata para que ValidationPipe vea la clase DTO en tiempo de ejecución
+  // Metadata para ValidationPipe
   if (createDto) {
     Reflect.defineMetadata('design:paramtypes', [createDto], proto, 'create');
   }
 
-  // update tiene (id, item) => fijamos idType y updateDto
   if (updateDto) {
     Reflect.defineMetadata('design:paramtypes', [idType, updateDto], proto, 'update');
   }
 
-  // id params
   Reflect.defineMetadata('design:paramtypes', [idType], proto, 'getOne');
   Reflect.defineMetadata('design:paramtypes', [idType], proto, 'delete');
 

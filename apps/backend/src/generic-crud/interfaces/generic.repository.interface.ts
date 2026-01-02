@@ -1,7 +1,7 @@
 // generic-repository.interface.ts
 export default interface IGenericRepository<TModel, TDto, TId = string> {
   findAll(): Promise<TModel[]>;
-  findPaginated(page: number);
+  findPaginated(page: number, pageSize: number);
   findByField(field: string, value: any): Promise<TModel | null>;
   findById(id: TId): Promise<TModel | null>;
   create(item: TDto): Promise<TModel>;

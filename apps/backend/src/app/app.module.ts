@@ -11,33 +11,33 @@ import ShutdownService from './app.service.js';
 
 import { SupplyDto, LandFileDto, ProducerDto, ProductionUnitDto } from '../dtos/index.js';
 
-const generics: GenericModuleConfig[] = [
+const modules: GenericModuleConfig[] = [
   {
     name: 'productionUnits',
     routePrefix: 'productionUnits',
     idFieldName: 'name',
-    modelName: 'productionUnit',
+    modelName: 'productionUnit', // debe coincidir con prisma.productionUnit
     dto: ProductionUnitDto,
   },
   {
     name: 'supply',
     routePrefix: 'supplies',
     idFieldName: 'name',
-    modelName: 'supply',
+    modelName: 'supply', // prisma.supply
     dto: SupplyDto,
   },
   {
     name: 'landFile',
     routePrefix: 'landFiles',
-    idFieldName: 'fieldNumber',
-    modelName: 'landFile',
+    idFieldName: 'fileNumber',
+    modelName: 'landFile', // prisma.landFile
     dto: LandFileDto,
   },
   {
     name: 'producers',
     routePrefix: 'producers',
     idFieldName: 'dni',
-    modelName: 'producer',
+    modelName: 'producer', // prisma.producer
     dto: ProducerDto,
   },
 ];
@@ -50,7 +50,7 @@ const generics: GenericModuleConfig[] = [
     UserModule,
     AuthModule,
     LoggerModule,
-    ...generics.map(GenericModule.forRoot),
+    ...modules.map(GenericModule.forRoot),
   ],
   providers: [ShutdownService],
 })
