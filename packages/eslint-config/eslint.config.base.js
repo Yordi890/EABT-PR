@@ -1,17 +1,45 @@
-/** @type {import("eslint").Linter.Config} */
-const turboConfig = require("eslint-config-turbo").default;
-// import { turboConfig } from "eslint-config-turbo/flat";
+// packages/eslint-config/eslint.config.base.js
+import js from "@eslint/js";
+import eslintConfigPrettier from "eslint-config-prettier";
+import turboPlugin from "eslint-plugin-turbo";
+import tseslint from "typescript-eslint";
+import onlyWarn from "eslint-plugin-only-warn";
+
+/**
+ * A shared ESLint configuration for the repository.
+ *
+ * @type {import("eslint").Linter.Config[]}
+ * */
+export const config = [
+  js.configs.recommended,
+  eslintConfigPrettier,
+  ...tseslint.configs.recommended,
+  {
+    plugins: {
+      turbo: turboPlugin,
+    },
+    rules: {
+      "turbo/no-undeclared-env-vars": "warn",
+    },
+  },
+  {
+    plugins: {
+      onlyWarn,
+    },
+  },
+  {
+    ignores: ["dist/**"],
+  },
+];
+
+/* Config anterior
+const turbo = require("eslint-config-turbo").default;
 
 module.exports = {
   root: true,
-  ...turboConfig,
-  extends: [
-    // ...turboConfig.extends,
-    // "plugin:@typescript-eslint/recommended", // Para que no permita cosas como el require
-    "plugin:prettier/recommended",
-    "prettier",
-  ],
-  plugins: ["@typescript-eslint/eslint-plugin"],
+  ...turbo,
+  extends: ["plugin:prettier/recommended", "prettier"],
+  plugins: ["@typescript-eslint"],
   parser: "@typescript-eslint/parser",
   ignorePatterns: [
     ".*.js",
@@ -27,3 +55,4 @@ module.exports = {
     "no-console": "error",
   },
 };
+*/
