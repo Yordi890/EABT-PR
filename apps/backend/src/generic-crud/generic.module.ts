@@ -1,5 +1,5 @@
 import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
-import { PrismaClient } from '../../generated/prisma/client.js';
+import { Prisma } from '../../generated/prisma/client.js';
 
 import GenericRepository from './generic.repository.js';
 import GenericService from './generic.service.js';
@@ -10,10 +10,11 @@ import GenericController from './generic.controller.js';
 import { PartialType } from '@nestjs/mapped-types';
 import IGenericRepository from './interfaces/generic.repository.interface.js';
 
-// Tipo seguro: todas las propiedades delegadas disponibles en PrismaClient
-export type PrismaModelName = keyof PrismaClient;
+// type ModelNameLower = Uncapitalize<(typeof Prisma.ModelName)[keyof typeof Prisma.ModelName]>;
+type ValuesOf<T> = T[keyof T];
+type ModelNameLower = Uncapitalize<ValuesOf<typeof Prisma.ModelName>>;
 
-export interface GenericModuleConfig<T extends PrismaModelName = PrismaModelName> {
+export interface GenericModuleConfig<T extends ModelNameLower = ModelNameLower> {
   name: string;
   routePrefix: string;
   modelName: T;
@@ -27,7 +28,7 @@ export interface GenericModuleConfig<T extends PrismaModelName = PrismaModelName
 
 @Module({})
 export default class GenericModule {
-  static forRoot<T extends PrismaModelName = PrismaModelName>(
+  static forRoot<T extends ModelNameLower = ModelNameLower>(
     config: GenericModuleConfig<T>,
   ): DynamicModule {
     const serviceToken = `${config.name.toUpperCase()}_SERVICE`;

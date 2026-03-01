@@ -18,7 +18,6 @@ export default class GenericService<TModel, TDto, TId = string> {
   protected async afterCreate(item: TModel): Promise<void> {}
 
   async listAll(): Promise<TModel[]> {
-    console.log("hello");
     try {
       this.logger.log('Listando elementos');
       return await this.repository.findAll();

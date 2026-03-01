@@ -26,8 +26,7 @@ export default class GenericRepository<
   TUpdateInput,
   TWhereUnique,
   T extends keyof PrismaClient,
-> implements IGenericRepository<TModel, TCreateInput, any>
-{
+> implements IGenericRepository<TModel, TCreateInput, any> {
   // Delegate tipado del modelo específico
   protected modelDelegate: PrismaClient[T];
 
@@ -76,7 +75,11 @@ export default class GenericRepository<
   }
 
   async findById(where: TWhereUnique): Promise<TModel | null> {
-    return (this.modelDelegate as any).findUnique({ where });
+    return (this.modelDelegate as any).findUnique({
+      where: {
+        [this.config.idFieldName]: where,
+      },
+    });
   }
 
   async create(data: TCreateInput): Promise<TModel> {

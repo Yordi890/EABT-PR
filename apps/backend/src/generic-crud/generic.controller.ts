@@ -13,7 +13,6 @@ import {
   Type,
 } from '@nestjs/common';
 import GenericService from './generic.service.js';
-import PaginationDto from '../dtos/pagination.dto.js';
 
 export default function GenericController<TModel, TDto, TId>(
   routePrefix: string,
@@ -26,7 +25,7 @@ export default function GenericController<TModel, TDto, TId>(
   class GenericController {
     constructor(@Inject(serviceToken) readonly service: GenericService<TModel, TDto, TId>) {}
 
-    @Get('all')
+    @Get()
     async getAll() {
       return this.service.listAll();
     }
