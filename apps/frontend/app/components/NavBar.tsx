@@ -5,7 +5,7 @@ const NavBar = () => {
   const navigate: NavigateFunction = useNavigate();
 
   const handleClick = (item: string) => {
-    navigate(`/dashboard/${item.toLowerCase()}`);
+    navigate(`/dashboard/${item.toLowerCase()}?page=1`);
   };
 
   return (
