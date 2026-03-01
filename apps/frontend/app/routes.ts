@@ -11,5 +11,6 @@ export default [
   layout("routes/protected.tsx", [
     route("dashboard", "routes/dashboard.tsx"),
     route("dashboard/:resource", "routes/dashboard.resource.tsx"),
+    route(":resource/:id/edit", "routes/edit.tsx"),
   ]),
 ] satisfies RouteConfig;

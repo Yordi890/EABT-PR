@@ -20,43 +20,31 @@ interface TableProps<T> {
 const Table = <T extends { id: number }>({
   resource,
   columns,
-  pageSize = 10,
   pageIndex,
+  pageSize = 1,
   onTotalPagesChange,
 }: TableProps<T>) => {
-  const {
-    data,
-    currentPageData,
-    fetchNextPage,
-    hasNextPage,
-    isLoading,
-    isError,
-  } = usePaginatedResource<T>(resource, pageIndex);
+  const { data, meta, isLoading, isError } = usePaginatedResource<T>(
+    resource,
+    pageIndex,
+    pageSize,
+  );
 
-  const totalPages = data?.pages[0]?.meta.totalPages || 1;
+  const totalPages = meta?.totalPages ?? 0;
 
   useEffect(() => {
-    if (onTotalPagesChange) onTotalPagesChange(totalPages);
+    if (onTotalPagesChange) {
+      onTotalPagesChange(totalPages);
+    }
   }, [totalPages, onTotalPagesChange]);
 
   const table = useReactTable({
-    data: currentPageData,
+    data: data ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    manualPagination: true,
     pageCount: totalPages,
-    state: {
-      pagination: {
-        pageIndex: pageIndex - 1,
-        pageSize,
-      },
-    },
   });
-
-  useEffect(() => {
-    if (hasNextPage && pageIndex > 1) fetchNextPage();
-  }, [pageIndex, fetchNextPage, hasNextPage]);
 
   if (isLoading) return <div className="text-center py-4">Cargando...</div>;
   if (isError)
@@ -70,7 +58,6 @@ const Table = <T extends { id: number }>({
 
   return (
     <div className="flex flex-col items-center my-8">
-      {/* ↓ What defines the size of the table ↓ */}
       <div className="overflow-x-auto max-w-8xl">
         <table className="bg-white border border-gray-300 table-auto mx-auto shadow-md rounded-md">
           <thead>
@@ -133,7 +120,7 @@ const Table = <T extends { id: number }>({
             ) : (
               <tr>
                 <td
-                  colSpan={columns.length + 1} // <- Because the actions column is no longer counted
+                  colSpan={columns.length + 1}
                   className="text-center py-6 text-gray-500 border border-gray-300 italic"
                 >
                   No hay elementos para mostrar
