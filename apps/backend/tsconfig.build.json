@@ -1,5 +1,17 @@
 {
   "extends": "./tsconfig.json",
-  "sourceMap": false,
-  "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
+
+  "compilerOptions": {
+    "outDir": "./dist",
+
+    "incremental": true,
+
+    // This help to reduce the space
+    "removeComments": true,
+    "sourceMap": false,
+    "declaration": false,
+    "importHelpers": true
+  },
+
+  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
 }

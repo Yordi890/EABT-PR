@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { jest } from '@jest/globals';
-import { GenericController } from '../../src/generic-crud/generic.controller.js';
+import { beforeEach, describe, expect, it, jest } from "@jest/globals";
+import GenericController from '../../src/generic-crud/generic.controller.js';
 import { NotFoundException } from '@nestjs/common';
 
 //

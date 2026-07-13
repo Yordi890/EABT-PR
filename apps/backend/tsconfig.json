@@ -1,27 +1,25 @@
 {
   "compilerOptions": {
     "module": "NodeNext",
-    "moduleResolution": "nodenext",
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "NodeNext",
+
     "target": "ES2024",
     "lib": ["ES2024"],
-    "outDir": "./dist",
-    "baseUrl": "./",
-    "incremental": true,
-    "skipLibCheck": true,
+
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
+    "alwaysStrict": true,
+
+    "skipLibCheck": true,
+
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false,
-    "esModuleInterop": true,
-    "alwaysStrict": true,
-    // Estos de abajo me ahorran espacio en el build
-    "importHelpers": true,
-    "declaration": false,
-    "sourceMap": true
+    "noFallthroughCasesInSwitch": false
   }
 }

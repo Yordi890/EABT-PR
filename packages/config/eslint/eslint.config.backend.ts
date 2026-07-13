@@ -2,14 +2,14 @@ import globals from "globals";
 
 import nestjsTyped from "@darraghor/eslint-plugin-nestjs-typed";
 
-import baseConfig from "./eslint.config.base.ts";
+import { defineConfig } from "@eslint/config-helpers";
+
+import baseConfig from "./eslint.config.base.js";
 
 /**
  * ESLint configuration for NestJS applications.
- *
- * @type {import("eslint").Linter.Config[]}
  */
-export const nestJsConfig = [
+export const nestJsConfig = defineConfig(
   ...baseConfig,
 
   {
@@ -45,15 +45,10 @@ export const nestJsConfig = [
 
       "@typescript-eslint/require-await": "warn",
 
-
-      /*
-       * NestJS rules
-       */
-
       /*
        * General backend rules
        */
       // "no-console": "error",
     },
   },
-];
+);
