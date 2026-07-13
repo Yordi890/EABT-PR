@@ -3,24 +3,24 @@ import { IsDateString, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 export class LandFileDto {
   @IsString()
   @IsNotEmpty()
-  producerdni: string;
+  producerdni!: string;
 
   @IsString()
   @IsNotEmpty()
-  fileNumber: string;
+  fileNumber!: string;
 
   @IsNumber()
-  area: number;
+  area!: number;
 
   @IsString()
   @IsNotEmpty()
-  propertyType: string;
+  propertyType!: string;
 
   @IsDateString()
   @IsNotEmpty()
-  issueDate: string;
+  issueDate!: string;
 
   @IsDateString()
   @IsNotEmpty()
-  expirationDate: string;
+  expirationDate!: string;
 }

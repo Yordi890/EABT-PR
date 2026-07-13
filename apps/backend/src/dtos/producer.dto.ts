@@ -3,38 +3,38 @@ import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
 export class ProducerDto {
   @IsNotEmpty()
   @IsString()
-  dni: string;
+  dni!: string;
 
   @IsNotEmpty()
   @IsString()
-  code: string;
+  code!: string;
 
   @IsNotEmpty()
   @IsString()
-  firstName: string;
+  firstName!: string;
 
   @IsNotEmpty()
   @IsString()
-  lastName1: string;
+  lastName1!: string;
 
   @IsNotEmpty()
   @IsString()
-  lastName2: string;
+  lastName2!: string;
 
   @IsNotEmpty()
   @IsString()
-  phone: string;
+  phone!: string;
 
   @IsNotEmpty()
   @IsString()
   @IsOptional()
-  productionUnitName: string;
+  productionUnitName!: string;
 
   @IsNotEmpty()
   @IsString()
-  cupCard: string;
+  cupCard!: string;
 
   @IsNotEmpty()
   @IsString()
-  mlcCard: string;
+  mlcCard!: string;
 }

@@ -3,17 +3,17 @@ import { IsNotEmpty, IsNumber, IsPositive, IsString } from 'class-validator';
 export class SupplyDto {
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name!: string;
 
   @IsPositive()
   @IsNumber()
-  quantity: number;
+  quantity!: number;
 
   @IsNotEmpty()
   @IsString()
-  unit: string;
+  unit!: string;
 
   @IsPositive()
   @IsNumber()
-  price: number;
+  price!: number;
 }

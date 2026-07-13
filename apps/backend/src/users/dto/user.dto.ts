@@ -5,21 +5,21 @@ import { ApiSchema } from '@nestjs/swagger';
 export default class UserDto {
   @IsString()
   @IsNotEmpty()
-  identityCard: string;
+  identityCard!: string;
 
   @IsString()
   @IsNotEmpty()
-  firstName: string;
+  firstName!: string;
 
   @IsString()
   @IsNotEmpty()
-  lastName: string;
+  lastName!: string;
 
   @IsString()
   @IsNotEmpty()
-  userName: string;
+  userName!: string;
 
   @IsString()
   @IsNotEmpty()
-  password: string;
+  password!: string;
 }

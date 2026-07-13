@@ -4,9 +4,9 @@ export class ProductionUnitDto {
   @IsString()
   @IsNotEmpty()
   @IsOptional()
-  name: string;
+  name!: string;
 
   @IsString()
   @IsNotEmpty()
-  address: string;
+  address!: string;
 }

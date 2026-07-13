@@ -5,10 +5,10 @@ export default class LoginDto {
   @Transform(({ value }: { value: string }) => value.trim())
   @IsNotEmpty()
   @IsString()
-  userName: string;
+  userName!: string;
 
   @Transform(({ value }: { value: string }) => value.trim())
   @IsNotEmpty()
   @IsString()
-  password: string;
+  password!: string;
 }
