@@ -18,23 +18,24 @@ export default function LoginForm() {
   const navigate = useNavigate();
   const [loginError, setLoginError] = useState<string | null>(null);
 
-  const onSubmit = async (data: LoginFormInputs) => {
-    setLoginError(null); // Limpiamos errores previos
-    await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulamos el delay del servidor
+    const onSubmit = async (data: LoginFormInputs) => {
+    setLoginError(null);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     try {
-      // 3. Aquí harías tu petición real (fetch/axios) a tu backend
-      // Ejemplo simulado: si el usuario es "admin" y la pass "123456", entra
+      // Si es Admin, lo mandamos a /admin-dashboard
       if (data.usuario === "admin" && data.password === "123456") {
-        console.log("Login exitoso");
-        
-        // Opcional: Guardar un token en localStorage o contexto
-        // localStorage.setItem("token", "mi_token_simulado");
-
-        // 4. REDIRECCIONAMOS al dashboard
-        navigate("/dashboard"); 
-      } else {
-        // Si las credenciales no coinciden, mostramos un error
+        localStorage.setItem("userRole", "Admin");
+        localStorage.setItem("userName", "Admin Root");
+        navigate("/admin-dashboard"); 
+      } 
+      // Si es Operador, lo mandamos a /operador-dashboard
+      else if (data.usuario === "operador" && data.password === "123456") {
+        localStorage.setItem("userRole", "Operador");
+        localStorage.setItem("userName", "Operador Estándar");
+        navigate("/operador-dashboard"); 
+      } 
+      else {
         setLoginError("Usuario o contraseña incorrectos.");
       }
     } catch (error) {
@@ -47,14 +48,10 @@ export default function LoginForm() {
       
       {/* Logo y Nombre de la Empresa */}
       <div className="flex items-center space-x-3 mb-8">
-        <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-sm">
-          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-          </svg>
+        <div className="w-22 h-22 bg-white rounded-xl flex items-center justify-center shadow-sm">
+          <img src="src/assets/images.jpg" alt="" />
         </div>
-        <span className="text-2xl font-bold tracking-tight text-slate-900">
-          Empresa Corp
-        </span>
+        
       </div>
 
       {/* Contenedor del Formulario */}
@@ -117,9 +114,7 @@ export default function LoginForm() {
                 >
                   Contraseña
                 </label>
-                <a href="#" className="text-xs font-medium text-blue-600 hover:text-blue-700">
-                  ¿Olvidó su contraseña?
-                </a>
+                
               </div>
               <input
                 type="password"
@@ -172,9 +167,6 @@ export default function LoginForm() {
           </form>
         </div>
         
-        <p className="mt-6 text-center text-xs text-slate-500">
-          ¿Necesita ayuda? <a href="#" className="font-medium text-slate-700 hover:text-slate-900">Contáctenos</a>
-        </p>
       </div>
     </div>
   );
