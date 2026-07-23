@@ -28,14 +28,13 @@ const schemaConfig: any = {
             { name: "lastName1", label: "Primer Apellido", type: "text" },
             { name: "lastName2", label: "Segundo Apellido", type: "text" },
             { name: "phone", label: "Teléfono", type: "text", onlyNumbers: true },
-            // --- AQUÍ ESTÁ EL CAMBIO A SELECT ---
             { 
                 name: "productionUnitName", 
                 label: "Unidad de Producción", 
                 type: "select", 
-                optionsSource: "ProductionUnit", // De dónde sacar los datos
-                optionValueKey: "name",          // Qué campo usar como valor (el nombre)
-                optionLabelKey: "name"           // Qué mostrar en la lista
+                optionsSource: "ProductionUnit",
+                optionValueKey: "name",
+                optionLabelKey: "name"
             },
             { name: "cupCard", label: "Tarjeta CUP", type: "text", onlyNumbers: true },
             { name: "mlcCard", label: "Tarjeta MLC", type: "text", onlyNumbers: true },
@@ -57,43 +56,81 @@ const schemaConfig: any = {
     },
     LandFile: {
         name: "Expedientes de Tierra",
-        singularName: "Expediente",
+        singularName: "Expediente de Tierra",
         pk: "id",
-        searchFields: ["fileNumber", "producerdni"],
+        searchFields: ["fileNumber", "producerCode"],
         columns: [
-            { key: "id", label: "ID" },
             { key: "fileNumber", label: "No. Expediente" },
-            { key: "area", label: "Área" },
+            { key: "producerCode", label: "Productor" },
+            { key: "productionUnitName", label: "Unidad de Producción" },
+            { key: "area", label: "Área Total" },
             { key: "propertyType", label: "Tipo de Propiedad" },
-            { key: "issueDate", label: "Fecha Emisión" },
-            { key: "producerdni", label: "DNI Productor" },
+            { key: "issueDate", label: "Fecha de Emisión" },
+            { key: "expirationDate", label: "Válido por" },
         ],
         formFields: [
-            { name: "fileNumber", label: "No. Expediente", type: "text" },
-            { name: "area", label: "Área", type: "number" },
-            { name: "propertyType", label: "Tipo de Propiedad", type: "text" },
+            { 
+                name: "producerCode", 
+                label: "Productor", 
+                type: "select", 
+                optionsSource: "Producer",
+                optionValueKey: "code",
+                optionLabelKey: "code",
+                associatedDisplay: { 
+                    label: "Unidad de Producción", 
+                    source: "Producer", 
+                    matchKey: "code", 
+                    showKey: "productionUnitName" 
+                }
+            },
+            { name: "fileNumber", label: "Nro Expediente", type: "text" },
+            { name: "area", label: "Área Total", type: "number", min: 1 },
             { name: "issueDate", label: "Fecha de Emisión", type: "text" },
-            { name: "expirationDate", label: "Fecha de Expiración", type: "text" },
-            { name: "producerdni", label: "DNI del Productor", type: "text" },
+            { name: "expirationDate", label: "Válido por", type: "text" },
+            { 
+                name: "propertyType", 
+                label: "Tipo de Propiedad", 
+                type: "staticSelect", 
+                options: [
+                    { value: "Propietario", label: "Propietario" },
+                    { value: "Usufructuario", label: "Usufructuario" }
+                ]
+            },
         ],
     },
     Supply: {
-        name: "Suministros",
-        singularName: "Suministro",
+        name: "Insumos",
+        singularName: "Insumo",
         pk: "id",
-        searchFields: ["name"],
+        searchFields: ["name", "category"],
         columns: [
-            { key: "id", label: "ID" },
             { key: "name", label: "Nombre" },
-            { key: "quantity", label: "Cantidad" },
-            { key: "unit", label: "Unidad" },
-            { key: "price", label: "Precio" },
+            { key: "totalQuantity", label: "Cantidad Total" },
+            { key: "category", label: "Categoría" },
+            { key: "tapado", label: "Tapado" },
+            { key: "vegaFina2da", label: "Vega Fina 2da" },
+            { key: "burley", label: "Burley" },
+            { key: "vegaFina1ra", label: "Vega Fina 1ra" },
+            { key: "solPalo", label: "Sol Palo" },
         ],
         formFields: [
             { name: "name", label: "Nombre", type: "text" },
-            { name: "quantity", label: "Cantidad", type: "number" },
-            { name: "unit", label: "Unidad", type: "text" },
-            { name: "price", label: "Precio", type: "number" },
+            { name: "price", label: "Precio", type: "number", onlyNumbers: true },
+            { 
+                name: "category", 
+                label: "Categoría", 
+                type: "staticSelect", 
+                options: [
+                    { value: "Canasta basica", label: "Canasta basica" },
+                    { value: "Otros gastos", label: "Otros gastos" }
+                ]
+            },
+            { name: "tapado", label: "Tapado", type: "number", onlyNumbers: true },
+            { name: "vegaFina2da", label: "Vega Fina 2da", type: "number", onlyNumbers: true },
+            { name: "burley", label: "Burley", type: "number", onlyNumbers: true },
+            { name: "vegaFina1ra", label: "Vega Fina 1ra", type: "number", onlyNumbers: true },
+            { name: "solPalo", label: "Sol Palo", type: "number", onlyNumbers: true },
+            { name: "totalQuantity", label: "Cantidad Total", type: "number", onlyNumbers: true },
         ],
     },
     Contract: {
@@ -121,7 +158,7 @@ const schemaConfig: any = {
     },
 };
 
-// --- DATOS SIMULADOS ---
+// --- DATOS SIMULADOS (Actualizados) ---
 const mockDB: any = {
     Producer: [
         { id: 1, dni: "98765432", code: "P-001", firstName: "Juan", lastName1: "Perez", lastName2: "Gomez", phone: "5551234", productionUnitName: "Mártires del Corintia", cupCard: "90123456", mlcCard: "12345678" },
@@ -132,8 +169,10 @@ const mockDB: any = {
         { id: 2, name: "Carlos Hidalgo", address: "Km 1/2 carretera San Juan" },
         { id: 3, name: "Frank Pais", address: "Km 5/2 carretera San Juan" },
     ],
-    LandFile: [{ id: 1, fileNumber: "EXP-001", area: 10.5, propertyType: "Propia", issueDate: "2021-01-15", expirationDate: "2026-01-15", producerdni: "98765432" }],
-    Supply: [{ id: 1, name: "Fertilizante A", quantity: 50, unit: "kg", price: 25.50 }],
+    LandFile: [{ id: 1, fileNumber: "EXP-001", producerCode: "P-001", productionUnitName: "Mártires del Corintia", area: 10.5, propertyType: "Propietario", issueDate: "2021-01-15", expirationDate: "2026-01-15" }],
+    Supply: [
+        { id: 1, name: "Fertilizante A", totalQuantity: 50, category: "Canasta basica", tapado: 10, vegaFina2da: 10, burley: 10, vegaFina1ra: 10, solPalo: 10, price: 25.50 }
+    ],
     Contract: [{ id: 1, number: "CNT-2023-01", creationDate: "2023-05-01", plantingArea: 5.0, seedlingQuantity: 1000, plantingType: "Semia", tobaccoType: "Virginia", producerId: 1 }]
 };
 
@@ -185,6 +224,13 @@ export default function OperadorDashboard() {
     };
 
     const handleSave = (formData: any) => {
+        if (activeModel === "LandFile" && formData.producerCode) {
+            const producer = dbData.Producer.find((p: any) => p.code === formData.producerCode);
+            if (producer) {
+                formData.productionUnitName = producer.productionUnitName;
+            }
+        }
+
         if (editingItem) {
             setDbData((prev: any) => ({ ...prev, [activeModel]: prev[activeModel].map((item: any) => item.id === editingItem.id ? { ...item, ...formData } : item) }));
         } else {
@@ -342,7 +388,6 @@ export default function OperadorDashboard() {
                 )}
             </main>
 
-            {/* LE PASAMOS dbData AL MODAL PARA QUE PUEDA LLENAR LOS COMBOBOX */}
             {isModalOpen && activeModel !== "Inicio" && (
                 <DynamicModal
                     config={config}
@@ -388,7 +433,7 @@ export default function OperadorDashboard() {
 interface ModalProps {
     config: any;
     item: any;
-    dbData: any; // RECIBIMOS LOS DATOS AQUÍ
+    dbData: any;
     onClose: () => void;
     onSave: (data: any) => void;
 }
@@ -417,7 +462,7 @@ function DynamicModal({ config, item, dbData, onClose, onSave }: ModalProps) {
 
     return (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
                 <div className="px-6 py-4 border-b border-slate-200 flex justify-between items-center sticky top-0 bg-white z-10">
                     <h3 className="text-lg font-semibold text-slate-900">
                         {item ? `Editar ${config.singularName}` : `Insertar ${config.singularName}`}
@@ -427,47 +472,80 @@ function DynamicModal({ config, item, dbData, onClose, onSave }: ModalProps) {
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="p-6 space-y-4">
-                    {config.formFields.map((field: any) => (
-                        <div key={field.name}>
-                            <label htmlFor={field.name} className="block text-sm font-medium text-slate-700 mb-1.5">
-                                {field.label}
-                            </label>
-                            
-                            {/* LÓGICA PARA RENDERIZAR SELECT O INPUT */}
-                            {field.type === "select" ? (
-                                <select
-                                    id={field.name}
-                                    name={field.name}
-                                    value={formData[field.name] || ""}
-                                    onChange={handleChange}
-                                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:bg-white focus:border-emerald-500 focus:ring-emerald-100 transition-all"
-                                    required
-                                >
-                                    <option value="" disabled>Seleccione una opción...</option>
-                                    {dbData[field.optionsSource]?.map((opt: any) => (
-                                        <option key={opt.id} value={opt[field.optionValueKey]}>
-                                            {opt[field.optionLabelKey]}
-                                        </option>
-                                    ))}
-                                </select>
-                            ) : (
-                                <input
-                                    type={field.type}
-                                    id={field.name}
-                                    name={field.name}
-                                    value={formData[field.name] || ""}
-                                    onChange={handleChange}
-                                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:bg-white focus:border-emerald-500 focus:ring-emerald-100 transition-all"
-                                    required
-                                />
-                            )}
+                <form onSubmit={handleSubmit} className="p-6">
+                    {/* GRID DE 2 COLUMNAS PARA LOS CAMPOS DEL FORMULARIO */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
+                        {config.formFields.map((field: any) => {
+                            const associatedValue = field.associatedDisplay 
+                                ? dbData[field.associatedDisplay.source]?.find((opt: any) => opt[field.associatedDisplay.matchKey] === formData[field.name])?.[field.associatedDisplay.showKey]
+                                : null;
 
-                            {field.onlyNumbers && (
-                                <p className="mt-1 text-xs text-slate-400">Solo se permiten números.</p>
-                            )}
-                        </div>
-                    ))}
+                            return (
+                                <div key={field.name} className={field.associatedDisplay ? "sm:col-span-2" : ""}>
+                                    <label htmlFor={field.name} className="block text-sm font-medium text-slate-700 mb-1.5">
+                                        {field.label}
+                                    </label>
+                                    
+                                    {field.type === "staticSelect" ? (
+                                        <select
+                                            id={field.name}
+                                            name={field.name}
+                                            value={formData[field.name] || ""}
+                                            onChange={handleChange}
+                                            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:bg-white focus:border-emerald-500 focus:ring-emerald-100 transition-all"
+                                            required
+                                        >
+                                            <option value="" disabled>Seleccione una opción...</option>
+                                            {field.options.map((opt: any) => (
+                                                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                            ))}
+                                        </select>
+                                    ) : field.type === "select" ? (
+                                        <select
+                                            id={field.name}
+                                            name={field.name}
+                                            value={formData[field.name] || ""}
+                                            onChange={handleChange}
+                                            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:bg-white focus:border-emerald-500 focus:ring-emerald-100 transition-all"
+                                            required
+                                        >
+                                            <option value="" disabled>Seleccione una opción...</option>
+                                            {dbData[field.optionsSource]?.map((opt: any) => (
+                                                <option key={opt.id} value={opt[field.optionValueKey]}>
+                                                    {opt[field.optionLabelKey]}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    ) : (
+                                        <input
+                                            type={field.type}
+                                            id={field.name}
+                                            name={field.name}
+                                            value={formData[field.name] || ""}
+                                            onChange={handleChange}
+                                            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:bg-white focus:border-emerald-500 focus:ring-emerald-100 transition-all"
+                                            required
+                                        />
+                                    )}
+
+                                    {field.associatedDisplay && (
+                                        <div className="mt-2">
+                                            <label className="block text-sm font-medium text-slate-500 mb-1">
+                                                {field.associatedDisplay.label}
+                                            </label>
+                                            <div className="w-full px-3.5 py-2.5 bg-slate-100 border border-slate-200 rounded-lg text-slate-600 text-sm">
+                                                {associatedValue || "Seleccione un productor primero..."}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {field.onlyNumbers && (
+                                        <p className="mt-1 text-xs text-slate-400">Solo se permiten números.</p>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
 
                     <div className="pt-4 flex justify-end gap-3 border-t border-slate-100 mt-6">
                         <button
