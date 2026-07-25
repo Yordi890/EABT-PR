@@ -10,3 +10,4 @@ apps/backend/dist
 .env
 .eslintcache
 openapi.yaml
+.react-router/
