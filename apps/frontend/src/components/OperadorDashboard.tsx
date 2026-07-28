@@ -1,9 +1,12 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import fondoDashboard from "../assets/fondo-dashboard.jpg";
 
 // IMPORTACIONES PARA GRÁFICOS (RECHARTS)
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+
+// --- CONFIGURACIÓN DE LA API ---
+const API_BASE_URL = "http://localhost:3000/api"; // Cambia esto a la URL de tu backend
 
 // --- 1. CONFIGURACIÓN DE LA BASE DE DATOS ---
 const schemaConfig: any = {
@@ -20,11 +23,13 @@ const schemaConfig: any = {
         formFields: [
             { name: "dni", label: "Carnet de Identidad", type: "text", onlyNumbers: true }, { name: "code", label: "Código", type: "text" }, { name: "firstName", label: "Nombre", type: "text" }, { name: "lastName1", label: "Primer Apellido", type: "text" }, { name: "lastName2", label: "Segundo Apellido", type: "text" }, { name: "phone", label: "Teléfono", type: "text", onlyNumbers: true }, { name: "productionUnitName", label: "Unidad de Producción", type: "select", optionsSource: "ProductionUnit", optionValueKey: "name", optionLabelKey: "name" }, { name: "cupCard", label: "Tarjeta CUP", type: "text", onlyNumbers: true }, { name: "mlcCard", label: "Tarjeta MLC", type: "text", onlyNumbers: true },
         ],
+        endpoint: "producers"
     },
     ProductionUnit: {
         name: "Unidades de Producción", singularName: "Unidad de Producción", pk: "id", searchFields: ["name", "address"],
         columns: [ { key: "name", label: "Nombre" }, { key: "address", label: "Dirección" } ],
         formFields: [ { name: "name", label: "Nombre", type: "text" }, { name: "address", label: "Dirección", type: "text" } ],
+        endpoint: "production-units"
     },
     LandFile: {
         name: "Expedientes de Tierra", singularName: "Expediente de Tierra", pk: "id", searchFields: ["fileNumber", "producerCode"],
@@ -34,6 +39,7 @@ const schemaConfig: any = {
             { name: "fileNumber", label: "Nro Expediente", type: "text" }, { name: "area", label: "Área Total", type: "number", min: 1, validatePositive: true }, { name: "issueDate", label: "Fecha de Emisión", type: "date", max: "today" }, { name: "expirationDate", label: "Válido por", type: "date", min: "today" },
             { name: "propertyType", label: "Tipo de Propiedad", type: "staticSelect", options: [{ value: "Propietario", label: "Propietario" }, { value: "Usufructuario", label: "Usufructuario" }] },
         ],
+        endpoint: "land-files"
     },
     Supply: {
         name: "Insumos", singularName: "Insumo", pk: "id", searchFields: ["name", "category"],
@@ -43,6 +49,7 @@ const schemaConfig: any = {
             { name: "category", label: "Categoría", type: "staticSelect", options: [{ value: "Canasta basica", label: "Canasta basica" }, { value: "Otros gastos", label: "Otros gastos" }] },
             { name: "tapado", label: "Tapado", type: "number", onlyNumbers: true }, { name: "vegaFina2da", label: "Vega Fina 2da", type: "number", onlyNumbers: true }, { name: "burley", label: "Burley", type: "number", onlyNumbers: true }, { name: "vegaFina1ra", label: "Vega Fina 1ra", type: "number", onlyNumbers: true }, { name: "solPalo", label: "Sol Palo", type: "number", onlyNumbers: true }, { name: "totalQuantity", label: "Cantidad Total", type: "number", onlyNumbers: true },
         ],
+        endpoint: "supplies"
     },
     Contract: {
         name: "Contratos", singularName: "Contrato", pk: "id", searchFields: ["number", "producerCode"],
@@ -54,72 +61,20 @@ const schemaConfig: any = {
             { name: "tobaccoType", label: "Tipo de Tabaco", type: "staticSelect", options: [{ value: "Virginia", label: "Virginia" }, { value: "Burley", label: "Burley" }, { value: "Sol Palo", label: "Sol Palo" }, { value: "Vega Fina 1ra", label: "Vega Fina 1ra" }, { value: "Vega Fina 2da", label: "Vega Fina 2da" }] },
             { name: "startDate", label: "Fecha de Inicio", type: "date", max: "today" }, { name: "endDate", label: "Fecha de Culminación", type: "date", min: "today" },
         ],
+        endpoint: "contracts"
     },
-};
-
-// --- DATOS SIMULADOS PARA REPORTES ---
-const reportsData = {
-    r1: {
-        title: "Total de ha por unidad y tipo de tabaco",
-        table: [
-            { unidad: "Carlos Hidalgo", tipo: "Vega Fina 1ra", ha: 80 }, { unidad: "Carlos Hidalgo", tipo: "Tapado", ha: 50 }, { unidad: "Carlos Hidalgo", tipo: "Burley", ha: 80 },
-            { unidad: "Frank Pais", tipo: "Vega Fina 1ra", ha: 100 }, { unidad: "Frank Pais", tipo: "Sol Palo", ha: 70 },
-            { unidad: "Mártires del Corintia", tipo: "Vega Fina 1ra", ha: 292 }, { unidad: "Mártires del Corintia", tipo: "Tapado", ha: 160 }, { unidad: "Mártires del Corintia", tipo: "Vega Fina 2da", ha: 737 },
-        ],
-        chartData: [
-            { name: "Carlos Hidalgo", "Vega Fina 1ra": 80, "Tapado": 50, "Burley": 80, "Vega Fina 2da": 0, "Sol Palo": 0 },
-            { name: "Frank Pais", "Vega Fina 1ra": 100, "Tapado": 0, "Burley": 0, "Vega Fina 2da": 0, "Sol Palo": 70 },
-            { name: "Mártires del Corintia", "Vega Fina 1ra": 292, "Tapado": 160, "Burley": 0, "Vega Fina 2da": 737, "Sol Palo": 0 },
-        ]
-    },
-    r2: {
-        title: "Total de ha contratadas por tipo de tabaco",
-        table: [ { tipo: "Tapado", total: 210 }, { tipo: "Vega Fina 1ra", total: 472 }, { tipo: "Vega Fina 2da", total: 937 }, { tipo: "Sol Palo", total: 70 }, { tipo: "Burley", total: 80 } ],
-        chartData: [ { name: "Tapado", value: 210 }, { name: "Vega Fina 1ra", value: 472 }, { name: "Vega Fina 2da", value: 937 }, { name: "Sol Palo", value: 70 }, { name: "Burley", value: 80 } ]
-    },
-    r3: {
-        title: "Productores contratados por unidad",
-        table: [ { unidad: "Carlos Hidalgo", productores: 4 }, { unidad: "Frank País", productores: 1 }, { unidad: "Mártires del Corintia", productores: 3 } ],
-        chartData: [ { name: "Carlos Hidalgo", productores: 4 }, { name: "Frank País", productores: 1 }, { name: "Mártires del Corintia", productores: 3 } ]
-    },
-    r4: {
-        title: "Insumos asignados a cada productor",
-        table: [
-            { productor: "Juan Pérez", insumo: "Fertilizante A", cantidad: 50 }, { productor: "Juan Pérez", insumo: "Hilo para Ensaltar", cantidad: 20 },
-            { productor: "Maria Lopez", insumo: "Diesel", cantidad: 40 }, { productor: "Pedro Ramirez", insumo: "Fertilizante A", cantidad: 15 },
-        ],
-        chartData: [ { name: "Fertilizante A", value: 65 }, { name: "Hilo para Ensaltar", value: 20 }, { name: "Diesel", value: 40 } ]
-    },
-    r5: {
-        title: "Listado de productores por unidad",
-        table: [
-            { productor: "Juan Pérez Guerra", unidad: "Carlos Hidalgo" }, { productor: "Ana Suárez", unidad: "Carlos Hidalgo" },
-            { productor: "Pedro Ramirez", unidad: "Frank País" }, { productor: "Maria Lopez", unidad: "Mártires del Corintia" }, { productor: "Carlos Díaz", unidad: "Mártires del Corintia" },
-        ],
-        chartData: [ { name: "Carlos Hidalgo", value: 2 }, { name: "Frank País", value: 1 }, { name: "Mártires del Corintia", value: 2 } ]
-    }
 };
 
 const COLORS = ['#10b981', '#3b82f6', '#f97316', '#ef4444', '#8b5cf6', '#0ea5e9'];
-
-// --- DATOS BASE ---
-const mockDB: any = {
-    Producer: [
-        { id: 1, dni: "98765432", code: "P-001", firstName: "Juan", lastName1: "Perez", lastName2: "Gomez", phone: "5551234", productionUnitName: "Mártires del Corintia", cupCard: "90123456", mlcCard: "12345678" },
-        { id: 2, dni: "12345678", code: "P-002", firstName: "Maria", lastName1: "Lopez", lastName2: "Suarez", phone: "5559876", productionUnitName: "Carlos Hidalgo", cupCard: "90876543", mlcCard: "87654321" },
-    ],
-    ProductionUnit: [ { id: 1, name: "Mártires del Corintia", address: "Km 8/2 carretera San Juan" }, { id: 2, name: "Carlos Hidalgo", address: "Km 1/2 carretera San Juan" }, { id: 3, name: "Frank Pais", address: "Km 5/2 carretera San Juan" } ],
-    LandFile: [{ id: 1, fileNumber: "EXP-001", producerCode: "P-001", productionUnitName: "Mártires del Corintia", area: 10.5, propertyType: "Propietario", issueDate: "2021-01-15", expirationDate: "2026-01-15" }],
-    Supply: [{ id: 1, name: "Fertilizante A", totalQuantity: 50, category: "Canasta basica", tapado: 10, vegaFina2da: 10, burley: 10, vegaFina1ra: 10, solPalo: 10, price: 25.50 }],
-    Contract: [{ id: 1, number: "CNT-2023-01", producerCode: "P-001", productionUnitName: "Mártires del Corintia", plantingArea: 5.0, seedlingQuantity: 1000, plantingType: "Semia", tobaccoType: "Virginia", startDate: "2023-05-01", endDate: "2023-09-01" }]
-};
 
 // --- 2. COMPONENTE PRINCIPAL OPERADOR ---
 export default function OperadorDashboard() {
     const navigate = useNavigate();
     const [activeModel, setActiveModel] = useState<string>("Inicio");
-    const [dbData, setDbData] = useState(mockDB);
-    const [activeReport, setActiveReport] = useState<string>("r1"); // Por defecto muestra el primer reporte
+    const [dbData, setDbData] = useState<any>({});
+    const [reportsData, setReportsData] = useState<any>({});
+    const [activeReport, setActiveReport] = useState<string>("r1");
+    const [loading, setLoading] = useState<boolean>(false);
 
     const userRole = localStorage.getItem("userRole");
     const userName = localStorage.getItem("userName") || "Operador";
@@ -133,6 +88,48 @@ export default function OperadorDashboard() {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [itemToDelete, setItemToDelete] = useState<any>(null);
 
+    // --- FUNCIÓN PARA OBTENER DATOS DE LA API ---
+    const fetchData = async (modelKey: string) => {
+        setLoading(true);
+        const endpoint = schemaConfig[modelKey].endpoint;
+        try {
+            const res = await fetch(`${API_BASE_URL}/${endpoint}`);
+            const data = await res.json();
+            setDbData((prev: any) => ({ ...prev, [modelKey]: data }));
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            setDbData((prev: any) => ({ ...prev, [modelKey]: [] }));
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Cargar datos cuando cambia el modelo activo
+    useEffect(() => {
+        if (activeModel !== "Inicio" && activeModel !== "Reportes") {
+            fetchData(activeModel);
+        }
+        
+        // Cambiar título dinámicamente
+        if (activeModel === "Inicio") {
+            document.title = "Menú Operador - SGI Contratación";
+        } else if (activeModel === "Reportes") {
+            document.title = `Reportes - Menú Operador`;
+        } else {
+            document.title = `${schemaConfig[activeModel].name} - Menú Operador`;
+        }
+    }, [activeModel]);
+
+    // Cargar reportes si es necesario
+    useEffect(() => {
+        if (activeModel === "Reportes" && !reportsData.r1) {
+            fetch(`${API_BASE_URL}/reports`)
+                .then(res => res.json())
+                .then(data => setReportsData(data))
+                .catch(err => console.error("Error fetching reports:", err));
+        }
+    }, [activeModel, reportsData]);
+
     const filteredData = useMemo(() => {
         if (activeModel === "Inicio" || activeModel === "Reportes" || !dbData[activeModel]) return [];
         if (searchTerm.length < 2) return dbData[activeModel] || [];
@@ -145,26 +142,48 @@ export default function OperadorDashboard() {
     const handleOpenEdit = (item: any) => { setEditingItem(item); setIsViewMode(false); setIsModalOpen(true); };
     const handleDeleteClick = (item: any) => { setItemToDelete(item); setIsDeleteModalOpen(true); };
 
-    const confirmDelete = () => {
-        if (itemToDelete) setDbData((prev: any) => ({ ...prev, [activeModel]: prev[activeModel].filter((i: any) => i.id !== itemToDelete.id) }));
+    const confirmDelete = async () => {
+        if (!itemToDelete) return;
+        const endpoint = schemaConfig[activeModel].endpoint;
+        try {
+            await fetch(`${API_BASE_URL}/${endpoint}/${itemToDelete.id}`, { method: "DELETE" });
+            setDbData((prev: any) => ({ ...prev, [activeModel]: prev[activeModel].filter((i: any) => i.id !== itemToDelete.id) }));
+        } catch (error) {
+            console.error("Error deleting:", error);
+        }
         setIsDeleteModalOpen(false); setItemToDelete(null);
     };
 
-    const handleSave = (formData: any) => {
+    const handleSave = async (formData: any) => {
         if ((activeModel === "LandFile" || activeModel === "Contract") && formData.producerCode) {
-            const producer = dbData.Producer.find((p: any) => p.code === formData.producerCode);
+            const producer = dbData.Producer?.find((p: any) => p.code === formData.producerCode);
             if (producer) formData.productionUnitName = producer.productionUnitName;
         }
-        if (editingItem) {
-            setDbData((prev: any) => ({ ...prev, [activeModel]: prev[activeModel].map((item: any) => item.id === editingItem.id ? { ...item, ...formData } : item) }));
-        } else {
-            const newId = Math.max(0, ...(dbData[activeModel]?.map((d: any) => d.id) || [0])) + 1;
-            setDbData((prev: any) => ({ ...prev, [activeModel]: [...(prev[activeModel] || []), { id: newId, ...formData }] }));
+
+        const endpoint = schemaConfig[activeModel].endpoint;
+        const method = editingItem ? "PUT" : "POST";
+        const url = editingItem ? `${API_BASE_URL}/${endpoint}/${editingItem.id}` : `${API_BASE_URL}/${endpoint}`;
+
+        try {
+            const res = await fetch(url, {
+                method,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            });
+            const savedItem = await res.json();
+
+            if (editingItem) {
+                setDbData((prev: any) => ({ ...prev, [activeModel]: prev[activeModel].map((item: any) => item.id === editingItem.id ? { ...item, ...savedItem } : item) }));
+            } else {
+                setDbData((prev: any) => ({ ...prev, [activeModel]: [...(prev[activeModel] || []), savedItem] }));
+            }
+        } catch (error) {
+            console.error("Error saving:", error);
         }
         setIsModalOpen(false);
     };
 
-    const handleLogout = () => { localStorage.removeItem("userRole"); localStorage.removeItem("userName"); navigate("/"); };
+    const handleLogout = () => { localStorage.clear(); navigate("/"); };
     const config = schemaConfig[activeModel];
     const menuItems = Object.keys(schemaConfig);
 
@@ -217,35 +236,31 @@ export default function OperadorDashboard() {
                 ) : activeModel === "Reportes" ? (
                     // --- VISTA SPLIT-SCREEN DE REPORTES ---
                     <div className="flex h-full p-6 gap-6">
-                        
-                        {/* IZQUIERDA: NAVBAR DE REPORTES */}
                         <aside className="w-72 flex-shrink-0">
                             <h2 className="text-xl font-bold text-slate-800 mb-4">Tipos de Reportes</h2>
                             <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                                {Object.keys(reportsData).map((rKey) => (
-                                    <button 
-                                        key={rKey} 
-                                        onClick={() => setActiveReport(rKey)} 
-                                        className={`w-full flex items-center gap-3 p-4 text-left transition-all cursor-pointer border-l-4 ${activeReport === rKey ? 'bg-emerald-50 border-emerald-600 text-emerald-700' : 'border-transparent hover:bg-slate-50 text-slate-700'}`}
-                                    >
-                                        <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                                        <span className="text-sm font-medium">{reportsData[rKey as keyof typeof reportsData].title}</span>
-                                    </button>
-                                ))}
+                                {reportsData && Object.keys(reportsData).length > 0 ? (
+                                    Object.keys(reportsData).map((rKey) => (
+                                        <button key={rKey} onClick={() => setActiveReport(rKey)} className={`w-full flex items-center gap-3 p-4 text-left transition-all cursor-pointer border-l-4 ${activeReport === rKey ? 'bg-emerald-50 border-emerald-600 text-emerald-700' : 'border-transparent hover:bg-slate-50 text-slate-700'}`}>
+                                            <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                            <span className="text-sm font-medium">{reportsData[rKey].title}</span>
+                                        </button>
+                                    ))
+                                ) : (
+                                    <p className="p-4 text-sm text-slate-400 text-center">Cargando reportes...</p>
+                                )}
                             </div>
                         </aside>
 
-                        {/* DERECHA: CONTENIDO DEL REPORTE */}
                         <section className="flex-1 overflow-y-auto">
-                            {activeReport && (
+                            {reportsData[activeReport] ? (
                                 <div className="space-y-6">
                                     <div>
-                                        <h2 className="text-2xl font-bold text-slate-800 tracking-tight">{reportsData[activeReport as keyof typeof reportsData].title}</h2>
+                                        <h2 className="text-2xl font-bold text-slate-800 tracking-tight">{reportsData[activeReport].title}</h2>
                                         <p className="text-sm text-slate-500">Datos estadísticos y gráficos.</p>
                                     </div>
 
                                     <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                                        {/* Tabla Mejorada */}
                                         <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm overflow-x-auto">
                                             <table className="w-full text-left border-collapse">
                                                 <thead>
@@ -258,7 +273,7 @@ export default function OperadorDashboard() {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {reportsData[activeReport as keyof typeof reportsData].table.map((row: any, i: number) => (
+                                                    {reportsData[activeReport].table.map((row: any, i: number) => (
                                                         <tr key={i} className="border-b border-slate-100 hover:bg-emerald-50 hover:text-emerald-900 transition-colors">
                                                             {activeReport === "r1" && (<><td className="py-3 pr-4 text-sm font-medium">{row.unidad}</td><td className="py-3 pr-4 text-sm">{row.tipo}</td><td className="py-3 text-sm font-bold text-right">{row.ha}</td></>)}
                                                             {activeReport === "r2" && (<><td className="py-3 pr-4 text-sm font-medium">{row.tipo}</td><td className="py-3 text-sm font-bold text-right">{row.total}</td></>)}
@@ -271,7 +286,6 @@ export default function OperadorDashboard() {
                                             </table>
                                         </div>
 
-                                        {/* Gráfico */}
                                         <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
                                             <h3 className="text-lg font-semibold text-slate-800 mb-4">Visualización Gráfica</h3>
                                             <div className="h-80 w-full">
@@ -292,7 +306,7 @@ export default function OperadorDashboard() {
                                                     ) : activeReport === "r2" ? (
                                                         <PieChart>
                                                             <Pie data={reportsData.r2.chartData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} label>
-                                                                {reportsData.r2.chartData.map((_, index) => (<Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />))}
+                                                                {reportsData.r2.chartData.map((_: any, index: number) => (<Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />))}
                                                             </Pie>
                                                             <Tooltip contentStyle={{ borderRadius: '0.5rem', border: '1px solid #e2e8f0' }} /><Legend />
                                                         </PieChart>
@@ -315,7 +329,7 @@ export default function OperadorDashboard() {
                                                     ) : (
                                                         <PieChart>
                                                             <Pie data={reportsData.r5.chartData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} label>
-                                                                {reportsData.r5.chartData.map((_, index) => (<Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />))}
+                                                                {reportsData.r5.chartData.map((_: any, index: number) => (<Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />))}
                                                             </Pie>
                                                             <Tooltip contentStyle={{ borderRadius: '0.5rem', border: '1px solid #e2e8f0' }} /><Legend />
                                                         </PieChart>
@@ -325,11 +339,13 @@ export default function OperadorDashboard() {
                                         </div>
                                     </div>
                                 </div>
+                            ) : (
+                                <div className="h-full flex items-center justify-center text-slate-400">Selecciona un reporte o cargando...</div>
                             )}
                         </section>
                     </div>
                 ) : (
-                    // --- VISTA NORMAL DE TABLAS CRUD (Hover MUY visible) ---
+                    // --- VISTA NORMAL DE TABLAS CRUD ---
                     <div className="p-8 space-y-6">
                         <div>
                             <h2 className="text-2xl font-bold text-slate-800 tracking-tight">Listado de {config.name.toLowerCase()}</h2>
@@ -354,7 +370,9 @@ export default function OperadorDashboard() {
                                         </tr>
                                     </thead>
                                     <tbody className="bg-white">
-                                        {filteredData.length === 0 ? (
+                                        {loading ? (
+                                            <tr><td colSpan={config.columns.length + 1} className="px-6 py-12 text-center text-slate-500 text-sm">Cargando datos desde el servidor...</td></tr>
+                                        ) : filteredData.length === 0 ? (
                                             <tr><td colSpan={config.columns.length + 1} className="px-6 py-12 text-center text-slate-500 text-sm">No se encontraron registros.</td></tr>
                                         ) : (
                                             filteredData.map((item: any) => (
