@@ -33,6 +33,7 @@
   },
   "packageManager": "pnpm@11.1.2",
   "dependencies": {
-    "react-router-dom": "^7.18.1"
+    "react-router-dom": "^7.18.1",
+    "recharts": "^3.10.1"
   }
 }
