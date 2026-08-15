@@ -1,0 +1,26 @@
+packages:
+  - packages/**
+  - apps/*
+
+allowBuilds:
+  '@compodoc/compodoc': true
+  '@nestjs/core': true
+  '@prisma/client': false
+  '@prisma/engines': true
+  '@scarf/scarf': true
+  '@swc/core': true
+  bcrypt: true
+  esbuild: true
+  prisma: true
+  unrs-resolver: true
+
+onlyBuiltDependencies:
+  - '@compodoc/compodoc'
+  - '@nestjs/core'
+  - '@prisma/engines'
+  - '@scarf/scarf'
+  - '@swc/core'
+  - bcrypt
+  - esbuild
+  - prisma
+  - unrs-resolver

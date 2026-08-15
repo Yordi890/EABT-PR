@@ -1,8 +1,8 @@
 import "./App.css";
 import { HashRouter, Routes, Route, Navigate } from "react-router-dom"; // <-- Cambio aquí
-import Form from "./components/Form.tsx";
-import AdminDashboard from "./components/AdminDashboard.tsx";
-import OperadorDashboard from "./components/OperadorDashboard.tsx";
+import Form from "../app/components/forms/Form.tsx";
+import AdminDashboard from "../app/components/AdminDashboard.tsx";
+import OperadorDashboard from "../app/components/OperadorDashboard.tsx";
 
 function App() {
   return (

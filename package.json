@@ -17,23 +17,16 @@
   "license": "ISC",
   "author": "Yordanis Tejeda Rodriguez",
   "type": "module",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "scripts": {
     "build": "turbo run build",
     "start": "turbo run start",
-    "dev": "turbo run dev --parallel",
+    "dev": "turbo run dev",
     "lint": "turbo run lint",
     "lint:fix": "turbo run fix:lint"
   },
   "devDependencies": {
-    "turbo": "^2.5.5"
+    "prettier": "^3.8.3",
+    "turbo": "^2.9.12"
   },
-  "packageManager": "npm@11.5.1",
-  "dependencies": {
-    "react-router-dom": "^7.18.1",
-    "recharts": "^3.10.1"
-  }
+  "packageManager": "pnpm@11.1.2"
 }

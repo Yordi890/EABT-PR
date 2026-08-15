@@ -1,12 +1,12 @@
 import { useState, useMemo, useEffect } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router";
 import fondoDashboard from "../assets/fondo-dashboard.jpg";
 
 // IMPORTACIONES PARA GRÁFICOS (RECHARTS)
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
 // --- CONFIGURACIÓN DE LA API ---
-const API_BASE_URL = "http://localhost:3000/api"; // Cambia esto a la URL de tu backend
+const API_BASE_URL = "http://localhost:3005/api/v1"; // Ajustado al backend de tu compañero
 
 // --- 1. CONFIGURACIÓN DE LA BASE DE DATOS ---
 const schemaConfig: any = {
