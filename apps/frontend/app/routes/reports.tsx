@@ -1,56 +1,52 @@
 import { useState, useEffect } from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
-const reportsData = {
-  r1: {
-    title: "Total de ha por unidad y tipo de tabaco",
-    table: [
-      { unidad: "Carlos Hidalgo", tipo: "Vega Fina 1ra", ha: 80 }, { unidad: "Carlos Hidalgo", tipo: "Tapado", ha: 50 }, { unidad: "Carlos Hidalgo", tipo: "Burley", ha: 80 },
-      { unidad: "Frank Pais", tipo: "Vega Fina 1ra", ha: 100 }, { unidad: "Frank Pais", tipo: "Sol Palo", ha: 70 },
-      { unidad: "Mártires del Corintia", tipo: "Vega Fina 1ra", ha: 292 }, { unidad: "Mártires del Corintia", tipo: "Tapado", ha: 160 }, { unidad: "Mártires del Corintia", tipo: "Vega Fina 2da", ha: 737 },
-    ],
-    chartData: [
-      { name: "Carlos Hidalgo", "Vega Fina 1ra": 80, "Tapado": 50, "Burley": 80, "Vega Fina 2da": 0, "Sol Palo": 0 },
-      { name: "Frank Pais", "Vega Fina 1ra": 100, "Tapado": 0, "Burley": 0, "Vega Fina 2da": 0, "Sol Palo": 70 },
-      { name: "Mártires del Corintia", "Vega Fina 1ra": 292, "Tapado": 160, "Burley": 0, "Vega Fina 2da": 737, "Sol Palo": 0 },
-    ]
-  },
-  r2: {
-    title: "Total de ha contratadas por tipo de tabaco",
-    table: [ { tipo: "Tapado", total: 210 }, { tipo: "Vega Fina 1ra", total: 472 }, { tipo: "Vega Fina 2da", total: 937 }, { tipo: "Sol Palo", total: 70 }, { tipo: "Burley", total: 80 } ],
-    chartData: [ { name: "Tapado", value: 210 }, { name: "Vega Fina 1ra", value: 472 }, { name: "Vega Fina 2da", value: 937 }, { name: "Sol Palo", value: 70 }, { name: "Burley", value: 80 } ]
-  },
-  r3: {
-    title: "Productores contratados por unidad",
-    table: [ { unidad: "Carlos Hidalgo", productores: 4 }, { unidad: "Frank País", productores: 1 }, { unidad: "Mártires del Corintia", productores: 3 } ],
-    chartData: [ { name: "Carlos Hidalgo", productores: 4 }, { name: "Frank País", productores: 1 }, { name: "Mártires del Corintia", productores: 3 } ]
-  },
-  r4: {
-    title: "Insumos asignados a cada productor",
-    table: [
-      { productor: "Juan Pérez", insumo: "Fertilizante A", cantidad: 50 }, { productor: "Juan Pérez", insumo: "Hilo para Ensaltar", cantidad: 20 },
-      { productor: "Maria Lopez", insumo: "Diesel", cantidad: 40 }, { productor: "Pedro Ramirez", insumo: "Fertilizante A", cantidad: 15 },
-    ],
-    chartData: [ { name: "Fertilizante A", value: 65 }, { name: "Hilo para Ensaltar", value: 20 }, { name: "Diesel", value: 40 } ]
-  },
-  r5: {
-    title: "Listado de productores por unidad",
-    table: [
-      { productor: "Juan Pérez Guerra", unidad: "Carlos Hidalgo" }, { productor: "Ana Suárez", unidad: "Carlos Hidalgo" },
-      { productor: "Pedro Ramirez", unidad: "Frank País" }, { productor: "Maria Lopez", unidad: "Mártires del Corintia" }, { productor: "Carlos Díaz", unidad: "Mártires del Corintia" },
-    ],
-    chartData: [ { name: "Carlos Hidalgo", value: 2 }, { name: "Frank País", value: 1 }, { name: "Mártires del Corintia", value: 2 } ]
-  }
-};
+const API_BASE_URL = "http://localhost:3005/api/v1";
 
 const COLORS = ['#10b981', '#3b82f6', '#f97316', '#ef4444', '#8b5cf6', '#0ea5e9'];
 
 export default function ReportsPage() {
   const [activeReport, setActiveReport] = useState("r1");
+  const [reportsData, setReportsData] = useState<any>({});
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     document.title = "Reportes - SGI Contratación";
+    
+    // Llamada real a la API para obtener los reportes
+    const fetchReports = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/reports`);
+        if (!res.ok) throw new Error("Error al cargar reportes");
+        const data = await res.json();
+        setReportsData(data);
+      } catch (error) {
+        console.error("Error fetching reports:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchReports();
   }, []);
+
+  // Si está cargando, mostramos un mensaje
+  if (isLoading) {
+    return (
+      <div className="p-8 text-center text-slate-500 font-medium">
+        Cargando datos estadísticos desde el servidor...
+      </div>
+    );
+  }
+
+  // Si no hay datos del reporte activo, mostramos un error
+  if (!reportsData[activeReport]) {
+    return (
+      <div className="p-8 text-center text-red-500 font-medium">
+        No se pudieron cargar los datos para este reporte. ¿Está el backend corriendo?
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 relative z-10">
@@ -59,9 +55,13 @@ export default function ReportsPage() {
           <h2 className="text-xl font-bold text-slate-800 mb-4">Tipos de Reportes</h2>
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             {Object.keys(reportsData).map((rKey) => (
-              <button key={rKey} onClick={() => setActiveReport(rKey)} className={`w-full flex items-center gap-3 p-4 text-left transition-all cursor-pointer border-l-4 ${activeReport === rKey ? 'bg-emerald-50 border-emerald-600 text-emerald-700' : 'border-transparent hover:bg-slate-50 text-slate-700'}`}>
+              <button 
+                key={rKey} 
+                onClick={() => setActiveReport(rKey)} 
+                className={`w-full flex items-center gap-3 p-4 text-left transition-all cursor-pointer border-l-4 ${activeReport === rKey ? 'bg-emerald-50 border-emerald-600 text-emerald-700' : 'border-transparent hover:bg-slate-50 text-slate-700'}`}
+              >
                 <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                <span className="text-sm font-medium">{reportsData[rKey as keyof typeof reportsData].title}</span>
+                <span className="text-sm font-medium">{reportsData[rKey].title}</span>
               </button>
             ))}
           </div>
@@ -69,7 +69,7 @@ export default function ReportsPage() {
 
         <section className="flex-1 overflow-y-auto space-y-6">
           <div>
-            <h2 className="text-2xl font-bold text-slate-800 tracking-tight">{reportsData[activeReport as keyof typeof reportsData].title}</h2>
+            <h2 className="text-2xl font-bold text-slate-800 tracking-tight">{reportsData[activeReport].title}</h2>
             <p className="text-sm text-slate-500">Datos estadísticos y gráficos.</p>
           </div>
 
@@ -86,7 +86,7 @@ export default function ReportsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {reportsData[activeReport as keyof typeof reportsData].table.map((row: any, i: number) => (
+                  {reportsData[activeReport].table.map((row: any, i: number) => (
                     <tr key={i} className="border-b border-slate-100 hover:bg-emerald-50 hover:text-emerald-900 transition-colors">
                       {activeReport === "r1" && (<><td className="py-3 pr-4 text-sm font-medium">{row.unidad}</td><td className="py-3 pr-4 text-sm">{row.tipo}</td><td className="py-3 text-sm font-bold text-right">{row.ha}</td></>)}
                       {activeReport === "r2" && (<><td className="py-3 pr-4 text-sm font-medium">{row.tipo}</td><td className="py-3 text-sm font-bold text-right">{row.total}</td></>)}
