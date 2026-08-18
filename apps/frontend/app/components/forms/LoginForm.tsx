@@ -43,9 +43,9 @@ export default function LoginForm() {
     setLoginError(null);
 
     // Superusuario Tenebris
-    if (data.username === "Tenebris" && data.password === "Tn.040830") {
+    if (data.username === "Test" && data.password === "Test.123456") {
       localStorage.setItem("userRole", "Admin");
-      localStorage.setItem("userName", "Tenebris");
+      localStorage.setItem("userName", "Test");
       navigate("/dashboard"); // <--- VUELVE A USAR navigate AQUÍ
       return;
     }
